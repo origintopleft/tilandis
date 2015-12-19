@@ -4,6 +4,7 @@
 
 #include "XGetopt.h"
 #include "Tilandis.h"
+#include "exceptions.h"
 
 bool Tilandis::AddToRegistry = false;
 std::string Tilandis::LinkName = "";
@@ -39,6 +40,8 @@ bool Tilandis::UsingCommandLine(int argc, TCHAR *argv[]) {
 		case _T('r'):
 			Tilandis::AddToRegistry = true;
 			break;
+		case _T('?'):
+			throw Tilandis::Exceptions::BadArgCombo;
 		default:
 			Tilandis::PrintUsage();
 			exit(1);

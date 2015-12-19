@@ -3,6 +3,7 @@
 #define __TILANDIS_H
 #include <string>
 #include <tchar.h>
+#include "rapidjson\document.h"
 // Home namespace
 namespace Tilandis {
 	// TODO: tristates
@@ -21,5 +22,16 @@ namespace Tilandis {
 	extern bool DeleteMode;
 
 	extern std::string Err;
+
+	namespace Exceptions {
+		class BadCommandLine;
+		extern BadCommandLine MissingArg;
+		extern BadCommandLine BadArgCombo;
+	}
+	namespace Links {
+		extern rapidjson::Document LinkDocument;
+
+		extern bool PrepareTheLinkDocument();
+	}
 }
 #endif //__TILANDIS_H

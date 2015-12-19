@@ -24,10 +24,21 @@
     <ClCompile Include="linkmgmt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="exceptions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tilandis.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="exceptions.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
