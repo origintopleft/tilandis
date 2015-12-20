@@ -48,4 +48,5 @@ void Tilandis::PrintUsage() {
 	std::cout << "\t-p <pathname> :: Required. Path to thing to launch (accepts URLs)" << std::endl;
 	std::cout << "\t-a <args> :: Arguments to pass to the program." << std::endl;
 	std::cout << "\t-w <directory> :: The working directory to launch the program in. Defaults to the same as the file location." << std::endl;
+	std::cout << "\t-f :: Replace any existing link with the same name. (Mnemonic: \"force\")" << std::endl;
 }

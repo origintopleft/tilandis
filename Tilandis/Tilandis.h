@@ -20,6 +20,7 @@ namespace Tilandis {
 
 	extern bool AddToRegistry;
 	extern bool DeleteMode;
+	extern bool ForceLink;
 
 	extern std::string Err;
 
@@ -29,7 +30,7 @@ namespace Tilandis {
 		extern BadCommandLine BadArgCombo;
 	}
 	namespace Links {
-		extern rapidjson::Document LinkDocument;
+		extern rapidjson::Document *LinkDocument;
 
 		extern bool PrepareTheLinkDocument();
 	}

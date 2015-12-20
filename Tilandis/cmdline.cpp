@@ -12,6 +12,7 @@ std::string Tilandis::PathName = "";
 std::string Tilandis::Args = "";
 std::string Tilandis::WorkingDirectory = "";
 bool Tilandis::DeleteMode = false;
+bool Tilandis::ForceLink = false;
 
 bool Tilandis::UsingCommandLine(int argc, TCHAR *argv[]) {
 	int curarg;
@@ -20,7 +21,7 @@ bool Tilandis::UsingCommandLine(int argc, TCHAR *argv[]) {
 
 	if (argc == 2 && __argv[1] != "-r") { return false; }
 
-	while ((curarg = getopt(argc, argv, _T("a:d:n:p:rw:"))) != EOF) {
+	while ((curarg = getopt(argc, argv, _T("a:d:fn:p:rw:"))) != EOF) {
 		switch (curarg) {
 		case _T('a'):
 			Tilandis::Args = optarg;
@@ -40,6 +41,8 @@ bool Tilandis::UsingCommandLine(int argc, TCHAR *argv[]) {
 		case _T('r'):
 			Tilandis::AddToRegistry = true;
 			break;
+		case _T('f'):
+			Tilandis::ForceLink = true;
 		case _T('?'):
 			throw Tilandis::Exceptions::BadArgCombo;
 		default:
