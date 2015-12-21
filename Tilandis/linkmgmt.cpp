@@ -41,7 +41,7 @@ bool Tilandis::Links::PrepareTheLinkDocument() {
 	else { return true; }
 }
 
-bool Tilandis::CreateLink() {
+bool Tilandis::Links::CreateLink() {
 	if (Tilandis::PathName.empty()) { throw Tilandis::Exceptions::MissingArg; }
 	if (Tilandis::LinkName.empty()) { throw Tilandis::Exceptions::MissingArg; }
 
@@ -67,10 +67,37 @@ bool Tilandis::CreateLink() {
 	name.SetString(Tilandis::LinkName.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
 	value.SetObject();
 	Tilandis::Links::LinkDocument->AddMember(name, value, Tilandis::Links::LinkDocument->GetAllocator());
+	rapidjson::Value& newlink = (*Tilandis::Links::LinkDocument)[Tilandis::LinkName.c_str()];
 
+	// Path name
+	name.SetString("path");
+	value.SetString(Tilandis::PathName.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
+	newlink.AddMember(name, value, Tilandis::Links::LinkDocument->GetAllocator());
 
+	// Args
+	if (Tilandis::Args != "") { //if we have them, anyway
+		name.SetString("args");
+		value.SetString(Tilandis::Args.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
+		newlink.AddMember(name, value, Tilandis::Links::LinkDocument->GetAllocator());
+	}
+
+	// Working directory
+	name.SetString("workdir");
+	if (Tilandis::WorkingDirectory != "") { // has the user specified one?
+		// If we're in this block, yes
+		value.SetString(Tilandis::WorkingDirectory.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
+	}
+	else {
+		// Nope. Time to find it our damn selves.
+		value.SetString("C:\\", Tilandis::Links::LinkDocument->GetAllocator()); // FIXME: actually set up an autodetect for working dirs
+													// BULLSHIT: Need to also figure out how PathCchRemoveFileSpec works
+	}
+	newlink.AddMember(name, value, Tilandis::Links::LinkDocument->GetAllocator());
 }
 
-bool Tilandis::DeleteLink() {
-	return true; //stub
+bool Tilandis::Links::DeleteLink() {
+	if (!Tilandis::Links::LinkDocument->HasMember(Tilandis::LinkName.c_str())) { return false; }
+	
+	Tilandis::Links::LinkDocument->EraseMember(Tilandis::LinkName.c_str());
+	return true;
 }

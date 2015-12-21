@@ -10,9 +10,6 @@ namespace Tilandis {
 	extern bool UsingCommandLine(int argc, TCHAR *argv[]);
 	extern void PrintUsage();
 
-	extern bool CreateLink(); // Will get info from the below variables
-	extern bool DeleteLink(); 
-
 	extern std::string LinkName;
 	extern std::string PathName;
 	extern std::string WorkingDirectory;
@@ -31,6 +28,9 @@ namespace Tilandis {
 	}
 	namespace Links {
 		extern rapidjson::Document *LinkDocument;
+
+		extern bool CreateLink(); // Will get info from the below variables
+		extern bool DeleteLink();
 
 		extern bool PrepareTheLinkDocument();
 	}
