@@ -7,9 +7,10 @@
 // Home namespace
 namespace Tilandis {
 	// TODO: tristates
-	extern bool UsingCommandLine(int argc, TCHAR *argv[]);
 	extern void PrintUsage();
 
+	// cmdline.cpp
+	extern bool UsingCommandLine(int argc, TCHAR *argv[]);
 	extern std::string LinkName;
 	extern std::string PathName;
 	extern std::string WorkingDirectory;
@@ -19,18 +20,24 @@ namespace Tilandis {
 	extern bool DeleteMode;
 	extern bool ForceLink;
 
-	extern std::string Err;
+	extern std::string Err; // initialized in linkmgmt.cpp, theoretically settable anywhere
 
-	namespace Exceptions {
+	namespace Exceptions { // exceptions.cpp
 		class BadCommandLine;
 		extern BadCommandLine MissingArg;
 		extern BadCommandLine BadArgCombo;
+
+		class BadLink;
+		extern BadLink NoSuchLink;
+		extern BadLink MissingFile;
+		extern BadLink LaunchFailed;
 	}
-	namespace Links {
+	namespace Links { // linkmgmt.cpp
 		extern rapidjson::Document *LinkDocument;
 
-		extern bool CreateLink(); // Will get info from the below variables
+		extern bool CreateLink(); // Will get info from the above variables
 		extern bool DeleteLink();
+		extern bool LaunchLink();
 
 		extern bool PrepareTheLinkDocument();
 	}
