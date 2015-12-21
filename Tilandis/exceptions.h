@@ -16,7 +16,7 @@ class Tilandis::Exceptions::BadLink : public std::exception {
 public:
 	enum subtype_t { NoSuchLink, MissingFile, LaunchFailed } subtype;
 	inline Tilandis::Exceptions::BadLink(subtype_t mysubtype);
-	inline Tilandis::Exceptions::BadLink(const Tilandis::Exceptions::BadCommandLine& copyme);
+	inline Tilandis::Exceptions::BadLink(const Tilandis::Exceptions::BadLink& copyme);
 
 	const char* what() const throw();
 };

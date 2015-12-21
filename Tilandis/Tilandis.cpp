@@ -15,25 +15,22 @@
 
 // Tilandis code
 #include "Tilandis.h"
+#include "exceptions.h"
 
 int main() {
-	std::cout << "I don't actually do shit yet:  ";
 	if (Tilandis::UsingCommandLine(__argc, __argv)) {
-		if (!Tilandis::LinkName.empty()) { std::cout << "You're creating the link: " << Tilandis::LinkName << std::endl; }
-		if (!Tilandis::PathName.empty()) { std::cout << "Your link will launch: " << Tilandis::PathName << std::endl; }
-		if (!Tilandis::Args.empty()) { std::cout << "Your arguments are: " << Tilandis::Args << std::endl; }
-		if (!Tilandis::WorkingDirectory.empty()) { std::cout << "Your working directory is: " << Tilandis::WorkingDirectory << std::endl; }
-		if (Tilandis::AddToRegistry) { std::cout << "You would register Tilandis into the registry while we're at it."; }
+		try {
+			if (Tilandis::DeleteMode) { Tilandis::Links::DeleteLink(); }
+			else { Tilandis::Links::CreateLink(); }
+		}
 	}
 	else {
 		if (__argc == 1) {
 			Tilandis::PrintUsage();
 		}
-		else if (__argc == 2) { std::cout << "You would launch link: " << __argv[1] << std::endl; }
+		else if (__argc == 2) { Tilandis::Links::LaunchLink(__argv[1]); }
 	}
 	
-	Sleep(5000);
-
 	return 0;
 }
 

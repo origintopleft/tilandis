@@ -3,6 +3,8 @@
 #include <sstream>
 #include <Windows.h>
 #include <PathCch.h>
+#include <tchar.h>
+#include <iostream>
 
 #include "Tilandis.h"
 #include "exceptions.h"
@@ -48,10 +50,10 @@ bool Tilandis::Links::CreateLink() {
 	/*  >>> ---- >>>> ---- RapidJSON doesn't speak string >>>> ---- VVVV */
 	if (Tilandis::Links::LinkDocument->HasMember(Tilandis::LinkName.c_str())) { // we already have a link with that name
 		if (Tilandis::ForceLink) { // -f opt
-			Tilandis::DeleteLink(); // reminder: these functions use the global variables in the Tilandis namespace because C++ doesn't have
-									//			 optional variables, at least not in the Pythonic sense where you can just declare args=None
-									//           sure i could probably just pass more JSON to everything but i feel like this way uses less
-									//           memory or something
+			Tilandis::Links::DeleteLink(); // reminder: these functions use the global variables in the Tilandis namespace because C++ doesn't have
+										   //			optional variables, at least not in the Pythonic sense where you can just declare args=None
+										   //           sure i could probably just pass more JSON to everything but i feel like this way uses less
+										   //           memory or something
 		}
 		else {
 			Tilandis::Err = "Link already exists (you might try -f)";
@@ -93,11 +95,35 @@ bool Tilandis::Links::CreateLink() {
 													// BULLSHIT: Need to also figure out how PathCchRemoveFileSpec works
 	}
 	newlink.AddMember(name, value, Tilandis::Links::LinkDocument->GetAllocator());
+
+	Tilandis::Links::SaveLinkDocument();
+	return true;
 }
 
 bool Tilandis::Links::DeleteLink() {
 	if (!Tilandis::Links::LinkDocument->HasMember(Tilandis::LinkName.c_str())) { return false; }
 	
 	Tilandis::Links::LinkDocument->EraseMember(Tilandis::LinkName.c_str());
+	Tilandis::Links::SaveLinkDocument();
+	return true;
+}
+
+bool Tilandis::Links::LaunchLink(char * LinkName) {
+	std::cout << "You would launch " << LinkName;
+	Sleep(5000);
+	return true;
+}
+
+bool Tilandis::Links::SaveLinkDocument() {
+	std::ofstream outfile;
+	outfile.open("links.json");
+
+	rapidjson::StringBuffer outbuffer;
+	rapidjson::Writer<rapidjson::StringBuffer> outwriter(outbuffer);
+	Tilandis::Links::LinkDocument->Accept(outwriter);
+
+	outfile << outbuffer.GetString << std::endl;
+	outfile.close();
+
 	return true;
 }

@@ -37,9 +37,10 @@ namespace Tilandis {
 
 		extern bool CreateLink(); // Will get info from the above variables
 		extern bool DeleteLink();
-		extern bool LaunchLink();
+		extern bool LaunchLink(char *);
 
 		extern bool PrepareTheLinkDocument();
+		extern bool SaveLinkDocument();
 	}
 }
 #endif //__TILANDIS_H
