@@ -6,13 +6,14 @@
 #include <iostream>
 
 #include "Tilandis.h"
+#include "Utility.h"
 #include "exceptions.h"
 #include "rapidjson\document.h"
 #include "rapidjson\writer.h"
 #include "rapidjson\stringbuffer.h"
 #include "rapidjson\filereadstream.h"
 
-std::string Tilandis::Err = "";
+std::wstring Tilandis::Err = L"";
 
 rapidjson::Document *Tilandis::Links::LinkDocument = new rapidjson::Document;
 
@@ -25,7 +26,9 @@ bool Tilandis::Links::PrepareTheLinkDocument() {
 	 *		Since this is a Windows 10 only project, we only need to change to fopen_s.
 	 */
 	FILE* infile;
-	errno_t errcode = fopen_s(&infile, "links.json", "r");
+	std::string configfilename = Utility::UTF8Converter.to_bytes(Tilandis::BaseDirectory) + "\\links.json";
+	std::cerr << configfilename << std::endl;
+	errno_t errcode = fopen_s(&infile, configfilename.c_str(), "r");
 	rapidjson::ParseResult result;
 	if (errcode == 0) {
 		char inbuffer[8192]; // 8KB, should be fine unless you manage to have an unnecessarily large links file
@@ -54,8 +57,7 @@ bool Tilandis::Links::CreateLink() {
 	if (Tilandis::PathName.empty()) { throw Tilandis::Exceptions::MissingArg; }
 	if (Tilandis::LinkName.empty()) { throw Tilandis::Exceptions::MissingArg; }
 
-	/*  >>> ---- >>>> ---- RapidJSON doesn't speak string >>>> ---- VVVV */
-	if (Tilandis::Links::LinkDocument->HasMember(Tilandis::LinkName.c_str())) { // we already have a link with that name
+	if (Tilandis::Links::LinkDocument->HasMember((char*)Tilandis::LinkName.c_str())) { // we already have a link with that name
 		if (Tilandis::ForceLink) { // -f opt
 			Tilandis::Links::DeleteLink(); // reminder: these functions use the global variables in the Tilandis namespace because C++ doesn't have
 										   //			optional variables, at least not in the Pythonic sense where you can just declare args=None
@@ -63,7 +65,7 @@ bool Tilandis::Links::CreateLink() {
 										   //           memory or something
 		}
 		else {
-			Tilandis::Err = "Link already exists (you might try -f)";
+			Tilandis::Err = L"Link already exists (you might try -f)";
 			return false;
 		}
 	}
@@ -73,28 +75,28 @@ bool Tilandis::Links::CreateLink() {
 	rapidjson::Value name;
 
 	// New object to add to the DOM
-	name.SetString(Tilandis::LinkName.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
+	name.SetString((char*)Tilandis::LinkName.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
 	value.SetObject();
 	Tilandis::Links::LinkDocument->AddMember(name, value, Tilandis::Links::LinkDocument->GetAllocator());
-	rapidjson::Value& newlink = (*Tilandis::Links::LinkDocument)[Tilandis::LinkName.c_str()];
+	rapidjson::Value& newlink = (*Tilandis::Links::LinkDocument)[(char*)Tilandis::LinkName.c_str()];
 
 	// Path name
 	name.SetString("path");
-	value.SetString(Tilandis::PathName.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
+	value.SetString((char*)Tilandis::PathName.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
 	newlink.AddMember(name, value, Tilandis::Links::LinkDocument->GetAllocator());
 
 	// Args
-	if (Tilandis::Args != "") { //if we have them, anyway
+	if (Tilandis::Args != L"") { //if we have them, anyway
 		name.SetString("args");
-		value.SetString(Tilandis::Args.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
+		value.SetString((char*)Tilandis::Args.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
 		newlink.AddMember(name, value, Tilandis::Links::LinkDocument->GetAllocator());
 	}
 
 	// Working directory
 	name.SetString("workdir");
-	if (Tilandis::WorkingDirectory != "") { // has the user specified one?
+	if (Tilandis::WorkingDirectory != L"") { // has the user specified one?
 		// If we're in this block, yes
-		value.SetString(Tilandis::WorkingDirectory.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
+		value.SetString((char*)Tilandis::WorkingDirectory.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
 	}
 	else {
 		// Nope. Time to find it our damn selves.
@@ -108,9 +110,9 @@ bool Tilandis::Links::CreateLink() {
 }
 
 bool Tilandis::Links::DeleteLink() {
-	if (!Tilandis::Links::LinkDocument->HasMember(Tilandis::LinkName.c_str())) { return false; }
+	if (!Tilandis::Links::LinkDocument->HasMember((char*)Tilandis::LinkName.c_str())) { return false; }
 	
-	Tilandis::Links::LinkDocument->RemoveMember(Tilandis::LinkName.c_str());
+	Tilandis::Links::LinkDocument->RemoveMember((char*)Tilandis::LinkName.c_str());
 	Tilandis::Links::SaveLinkDocument();
 	return true;
 }
@@ -123,11 +125,11 @@ bool Tilandis::Links::LaunchLink(const char * LinkName) {
 	rapidjson::Value& link = (*Tilandis::Links::LinkDocument)[LinkName];
 	std::cout << link["path"].GetString() << " in working directory " << link["workdir"].GetString();
 
-	std::string path = link["path"].GetString();
-	std::string workdir = link["workdir"].GetString();
+	std::wstring path = Utility::UTF8Converter.from_bytes(link["path"].GetString());
+	std::wstring workdir = Utility::UTF8Converter.from_bytes(link["workdir"].GetString());
 
-	ShellExecute(NULL, NULL, path.c_str(), "", workdir.c_str(), SW_SHOWDEFAULT);
-
+	ShellExecute(NULL, NULL, path.c_str(), L"", workdir.c_str(), SW_SHOWDEFAULT);
+	//Sleep(2000);
 	return true;
 }
 

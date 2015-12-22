@@ -7,11 +7,11 @@
 #include "exceptions.h"
 
 bool Tilandis::AddToRegistry = false;
-std::string Tilandis::LinkName = "";
-std::string Tilandis::PathName = "";
-std::string Tilandis::Args = "";
-std::string Tilandis::WorkingDirectory = "";
-std::string Tilandis::RegistryProtocolName = "";
+std::wstring Tilandis::LinkName = L"";
+std::wstring Tilandis::PathName = L"";
+std::wstring Tilandis::Args = L"";
+std::wstring Tilandis::WorkingDirectory = L"";
+std::wstring Tilandis::RegistryProtocolName = L"";
 bool Tilandis::CreateMode = false;
 bool Tilandis::DeleteMode = false;
 bool Tilandis::ForceLink = false;
@@ -23,32 +23,32 @@ bool Tilandis::UsingCommandLine(int argc, TCHAR *argv[]) {
 		return false;
 	}
 
-	while ((curarg = getopt(argc, argv, _T("a:d:fn:p:r:w:"))) != EOF) {
+	while ((curarg = getopt(argc, argv, L"a:d:fn:p:r:w:")) != EOF) {
 		switch (curarg) {
-		case _T('a'):
-			Tilandis::Args = optarg;
+		case L'a':
+			Tilandis::Args = *optarg;
 			break;
-		case _T('w'):
-			Tilandis::WorkingDirectory = optarg;
+		case L'w':
+			Tilandis::WorkingDirectory = *optarg;
 			break;
-		case _T('d'):
+		case L'd':
 			Tilandis::DeleteMode = true;
-			Tilandis::LinkName = optarg;
+			Tilandis::LinkName = *optarg;
 			break;
-		case _T('n'):
+		case L'n':
 			Tilandis::CreateMode = true;
-			Tilandis::LinkName = optarg;
+			Tilandis::LinkName = *optarg;
 			break;
-		case _T('p'):
-			Tilandis::PathName = optarg;
+		case L'p':
+			Tilandis::PathName = *optarg;
 			break;
-		case _T('r'):
+		case L'r':
 			Tilandis::AddToRegistry = true;
-			Tilandis::RegistryProtocolName = optarg;
+			Tilandis::RegistryProtocolName = *optarg;
 			break;
-		case _T('f'):
+		case L'f':
 			Tilandis::ForceLink = true;
-		case _T('?'):
+		case L'?':
 			throw Tilandis::Exceptions::BadArgCombo;
 		default:
 			Tilandis::PrintUsage();

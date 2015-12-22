@@ -5,6 +5,7 @@
  */
 
 // Standard headers
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -18,14 +19,22 @@
 // Tilandis code
 #include "Tilandis.h"
 #include "exceptions.h"
+#include "Utility.h"
+
+std::wstring Tilandis::BaseDirectory = L"";
 
 int main() {
-	std::cerr << __argv;
+	wchar_t* argvzero = new wchar_t[65535];
+	GetModuleFileName(NULL, argvzero, 65535);
+
+	std::wstring argvzerostr = argvzero;
+
+	Tilandis::BaseDirectory = Utility::basedir(argvzerostr);
 	if (!Tilandis::Links::PrepareTheLinkDocument()) {
 		std::cerr << "Failed to prepare the link document." << std::endl;
 		return 1;
 	}
-	if (Tilandis::UsingCommandLine(__argc, __argv)) { // FIXME: Commandline processing, while it works, is extremely friggin weird because I wrote it stoned
+	if (Tilandis::UsingCommandLine(__argc, (wchar_t**)__argv)) { // FIXME: Commandline processing, while it works, is extremely friggin weird because I wrote it stoned
 		try {
 			if (Tilandis::DeleteMode && Tilandis::CreateMode) { throw Tilandis::Exceptions::BadArgCombo; }
 			if (Tilandis::DeleteMode) { Tilandis::Links::DeleteLink(); }
@@ -52,6 +61,10 @@ int main() {
 			size_t pos;
 			if ((pos = LinkName.find(":")) != std::string::npos) { // if we FIND a colon
 				LinkName.erase(0, pos + 1); // Remove protocols from the beginning
+				char nasties[] = "/\\\r\n";
+				for (size_t i = 0; i < strlen(nasties); ++i) { // slash removal
+					LinkName.erase(std::remove(LinkName.begin(), LinkName.end(), nasties[i]), LinkName.end());
+				}
 			}
 			try {
 				if (!Tilandis::Links::LaunchLink(LinkName.c_str())) {
@@ -61,6 +74,10 @@ int main() {
 				}
 			}
 			catch (Tilandis::Exceptions::BadLink exc) {
+				std::ofstream err;
+				err.open("E:\\tilandis.err");
+				err << LinkName << std::endl;
+				err.close();
 				std::cerr << LinkName << " " << exc.what() << std::endl;
 				Sleep(5000);
 				return 1;
@@ -88,7 +105,7 @@ void Tilandis::PrintUsage() {
 bool Tilandis::RegisterProtocol() {
 	HKEY registry;
 	DWORD regresult;
-	long result = RegCreateKeyEx(HKEY_CLASSES_ROOT, Tilandis::RegistryProtocolName.c_str(), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &registry, &regresult);
+	long result = RegCreateKeyEx(HKEY_CLASSES_ROOT, (wchar_t*)Tilandis::RegistryProtocolName.c_str(), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &registry, &regresult);
 	if (regresult == REG_OPENED_EXISTING_KEY) { std::cout << "note: this protocol's already registered with something" << std::endl; }
 
 	result = RegSetValueEx(registry, TEXT("URL Protocol"), 0, REG_SZ, NULL, 0);
@@ -96,9 +113,9 @@ bool Tilandis::RegisterProtocol() {
 		return false;
 	}*/
 	HKEY subregistry;
-	result = RegCreateKeyEx(registry, "shell\\open\\command", 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &subregistry, &regresult);
+	result = RegCreateKeyEx(registry, L"shell\\open\\command", 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &subregistry, &regresult);
 
-	char* argvzero = new char[65535];
+	wchar_t* argvzero = new wchar_t[65535];
 	GetModuleFileName(NULL, argvzero, 65535);
 	std::stringstream regstringstream;
 	regstringstream << '"' << argvzero << "\" \"%1\"";

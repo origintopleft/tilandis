@@ -27,12 +27,18 @@
     <ClCompile Include="exceptions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tilandis.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="exceptions.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

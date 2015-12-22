@@ -11,18 +11,20 @@ namespace Tilandis {
 
 	// cmdline.cpp
 	extern bool UsingCommandLine(int argc, TCHAR *argv[]);
-	extern std::string LinkName;
-	extern std::string PathName;
-	extern std::string WorkingDirectory;
-	extern std::string Args;
+	extern std::wstring LinkName;
+	extern std::wstring PathName;
+	extern std::wstring WorkingDirectory;
+	extern std::wstring Args;
 
 	extern bool AddToRegistry;
-	extern std::string RegistryProtocolName;
+	extern std::wstring RegistryProtocolName;
 	extern bool CreateMode;
 	extern bool DeleteMode;
 	extern bool ForceLink;
 
-	extern std::string Err; // initialized in linkmgmt.cpp, theoretically settable anywhere
+	extern std::wstring BaseDirectory;
+
+	extern std::wstring Err; // initialized in linkmgmt.cpp, theoretically settable anywhere
 
 	namespace Exceptions { // exceptions.cpp
 		class BadCommandLine;
@@ -47,4 +49,6 @@ namespace Tilandis {
 
 	extern bool RegisterProtocol();
 }
+
+extern std::wstring basedir(std::wstring);
 #endif //__TILANDIS_H
