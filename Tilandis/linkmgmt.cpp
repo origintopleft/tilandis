@@ -116,8 +116,12 @@ bool Tilandis::Links::DeleteLink() {
 }
 
 bool Tilandis::Links::LaunchLink(char * LinkName) {
-	std::cout << "You would launch " << LinkName;
-	Sleep(5000);
+	if (!Tilandis::Links::LinkDocument->HasMember(LinkName)) {
+		throw Tilandis::Exceptions::NoSuchLink;
+		return false; // shhh, little debugger. go to sleep in your directory. Dala loves you
+	}
+	rapidjson::Value& link = (*Tilandis::Links::LinkDocument)[LinkName];
+	std::cout << link["path"].GetString() << " in working directory " << link["workdir"].GetString();
 	return true;
 }
 
