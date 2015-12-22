@@ -110,18 +110,26 @@ bool Tilandis::Links::CreateLink() {
 bool Tilandis::Links::DeleteLink() {
 	if (!Tilandis::Links::LinkDocument->HasMember(Tilandis::LinkName.c_str())) { return false; }
 	
-	Tilandis::Links::LinkDocument->EraseMember(Tilandis::LinkName.c_str());
+	Tilandis::Links::LinkDocument->RemoveMember(Tilandis::LinkName.c_str());
 	Tilandis::Links::SaveLinkDocument();
 	return true;
 }
 
-bool Tilandis::Links::LaunchLink(char * LinkName) {
+bool Tilandis::Links::LaunchLink(const char * LinkName) {
 	if (!Tilandis::Links::LinkDocument->HasMember(LinkName)) {
 		throw Tilandis::Exceptions::NoSuchLink;
 		return false; // shhh, little debugger. go to sleep in your directory. Dala loves you
 	}
 	rapidjson::Value& link = (*Tilandis::Links::LinkDocument)[LinkName];
 	std::cout << link["path"].GetString() << " in working directory " << link["workdir"].GetString();
+
+	std::string path = link["path"].GetString();
+	std::string workdir = link["workdir"].GetString();
+
+	ShellExecute(NULL, NULL, path.c_str(), "", workdir.c_str(), SW_SHOW); // I have no idea what to use for the last one,
+																 // but SW_SHOWDEFAULT has the word "default" in
+																 // it, so lets see how that works out for us
+
 	return true;
 }
 

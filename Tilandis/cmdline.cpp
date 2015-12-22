@@ -11,17 +11,19 @@ std::string Tilandis::LinkName = "";
 std::string Tilandis::PathName = "";
 std::string Tilandis::Args = "";
 std::string Tilandis::WorkingDirectory = "";
+std::string Tilandis::RegistryProtocolName = "";
+bool Tilandis::CreateMode = false;
 bool Tilandis::DeleteMode = false;
 bool Tilandis::ForceLink = false;
 
 bool Tilandis::UsingCommandLine(int argc, TCHAR *argv[]) {
 	int curarg;
 
-	if (argc == 1) { return false; }
+	if (argc < 3) { // 1 = "tilandis.exe", 2 = "tilandis.exe tilecreator:example"
+		return false;
+	}
 
-	if (argc == 2 && __argv[1] != "-r") { return false; }
-
-	while ((curarg = getopt(argc, argv, _T("a:d:fn:p:rw:"))) != EOF) {
+	while ((curarg = getopt(argc, argv, _T("a:d:fn:p:r:w:"))) != EOF) {
 		switch (curarg) {
 		case _T('a'):
 			Tilandis::Args = optarg;
@@ -31,8 +33,10 @@ bool Tilandis::UsingCommandLine(int argc, TCHAR *argv[]) {
 			break;
 		case _T('d'):
 			Tilandis::DeleteMode = true;
+			Tilandis::LinkName = optarg;
 			break;
 		case _T('n'):
+			Tilandis::CreateMode = true;
 			Tilandis::LinkName = optarg;
 			break;
 		case _T('p'):
@@ -40,6 +44,7 @@ bool Tilandis::UsingCommandLine(int argc, TCHAR *argv[]) {
 			break;
 		case _T('r'):
 			Tilandis::AddToRegistry = true;
+			Tilandis::RegistryProtocolName = optarg;
 			break;
 		case _T('f'):
 			Tilandis::ForceLink = true;

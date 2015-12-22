@@ -17,6 +17,8 @@ namespace Tilandis {
 	extern std::string Args;
 
 	extern bool AddToRegistry;
+	extern std::string RegistryProtocolName;
+	extern bool CreateMode;
 	extern bool DeleteMode;
 	extern bool ForceLink;
 
@@ -37,10 +39,12 @@ namespace Tilandis {
 
 		extern bool CreateLink(); // Will get info from the above variables
 		extern bool DeleteLink();
-		extern bool LaunchLink(char *);
+		extern bool LaunchLink(const char *);
 
 		extern bool PrepareTheLinkDocument();
 		extern bool SaveLinkDocument();
 	}
+
+	extern bool RegisterProtocol();
 }
 #endif //__TILANDIS_H
