@@ -126,9 +126,7 @@ bool Tilandis::Links::LaunchLink(const char * LinkName) {
 	std::string path = link["path"].GetString();
 	std::string workdir = link["workdir"].GetString();
 
-	ShellExecute(NULL, NULL, path.c_str(), "", workdir.c_str(), SW_SHOW); // I have no idea what to use for the last one,
-																 // but SW_SHOWDEFAULT has the word "default" in
-																 // it, so lets see how that works out for us
+	ShellExecute(NULL, NULL, path.c_str(), "", workdir.c_str(), SW_SHOWDEFAULT);
 
 	return true;
 }

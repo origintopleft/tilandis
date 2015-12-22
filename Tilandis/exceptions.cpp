@@ -11,8 +11,10 @@ Tilandis::Exceptions::BadCommandLine::BadCommandLine(const Tilandis::Exceptions:
 	 switch (copyme.subtype) {
 	 case MissingArg:
 		 subtype = MissingArg;
+		 break;
 	 case BadArgCombo:
 		 subtype = BadArgCombo;
+		 break;
 	 }
 }
  const char* Tilandis::Exceptions::BadCommandLine::what() const throw() {
@@ -33,10 +35,13 @@ Tilandis::Exceptions::BadLink::BadLink(const Tilandis::Exceptions::BadLink& copy
 	switch (copyme.subtype) {
 	case NoSuchLink:
 		subtype = NoSuchLink;
+		break;
 	case MissingFile:
 		subtype = MissingFile;
+		break;
 	case LaunchFailed:
 		subtype = LaunchFailed;
+		break;
 	}
 }
 const char* Tilandis::Exceptions::BadLink::what() const throw() {
