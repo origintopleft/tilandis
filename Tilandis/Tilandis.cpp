@@ -14,7 +14,7 @@
 #include <Windows.h>
 
 // Third party headers
-#include "getopt.c"
+#include "getopt.h"
 
 // Tilandis code
 #include "Tilandis.h"
@@ -23,7 +23,7 @@
 
 std::wstring Tilandis::BaseDirectory = L"";
 
-int main() {
+int main(int argc, wchar_t* argv) {
 	wchar_t* argvzero = new wchar_t[65535];
 	GetModuleFileName(NULL, argvzero, 65535);
 
@@ -34,7 +34,7 @@ int main() {
 		std::cerr << "Failed to prepare the link document." << std::endl;
 		return 1;
 	}
-	if (Tilandis::UsingCommandLine(__argc, (wchar_t*)__argv)) { // FIXME: Commandline processing, while it works, is extremely friggin weird because I wrote it stoned
+	if (Tilandis::UsingCommandLine(argc, argv)) { // FIXME: Commandline processing, while it works, is extremely friggin weird because I wrote it stoned
 		try {
 			if (Tilandis::DeleteMode && Tilandis::CreateMode) { throw Tilandis::Exceptions::BadArgCombo; }
 			if (Tilandis::DeleteMode) { Tilandis::Links::DeleteLink(); }
