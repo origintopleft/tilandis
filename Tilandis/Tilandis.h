@@ -10,7 +10,7 @@ namespace Tilandis {
 	extern void PrintUsage();
 
 	// cmdline.cpp
-	extern bool UsingCommandLine(int argc, wchar_t argv[]);
+	extern bool UsingCommandLine(int argc, wchar_t* argv);
 	extern std::wstring LinkName;
 	extern std::wstring PathName;
 	extern std::wstring WorkingDirectory;
@@ -45,6 +45,16 @@ namespace Tilandis {
 
 		extern bool PrepareTheLinkDocument();
 		extern bool SaveLinkDocument();
+	}
+
+	namespace GetOpt { // cmdline.cpp
+		extern int a;
+		extern int d;
+		extern int f;
+		extern int n;
+		extern int p;
+		extern int w;
+		extern int r;
 	}
 
 	extern bool RegisterProtocol();
