@@ -1,6 +1,5 @@
 #include <string>
 #include <fstream>
-#include <sstream>
 #include <Windows.h>
 #include <PathCch.h>
 #include <tchar.h>
@@ -11,35 +10,43 @@
 #include "rapidjson\document.h"
 #include "rapidjson\writer.h"
 #include "rapidjson\stringbuffer.h"
+#include "rapidjson\filereadstream.h"
 
 std::string Tilandis::Err = "";
 
-rapidjson::Document *Tilandis::Links::LinkDocument;
+rapidjson::Document *Tilandis::Links::LinkDocument = new rapidjson::Document;
 
 bool Tilandis::Links::PrepareTheLinkDocument() {
-	std::ifstream linksfile;
-	const char* jsoncstr;
-	linksfile.open("links.json");
-	if (linksfile.is_open()) {
-		std::stringstream linksstream; // Feed the whole file into this stringstream
-		std::string curline;
-		while (getline(linksfile, curline)) {
-			linksstream << curline; // Don't need to worry whether the newline at the end is there or not,
-									// still valid to RapidJSON
-		}
-		linksfile.close();
-		std::string temp = linksstream.str();
-		jsoncstr = temp.c_str(); // DING! Order up!
+	/* Note about MS stupidity:
+	 *		Some twat at MS decided that fopen, as it was, was somehow a "dangerous" function, and that you should be using
+	 *		fopen_s instead. The reason he's a twat is because he's using the same error as actual unsafe functions.
+	 *		For cross platform use, you would do `FILE* infile = fopen("links.json", "r")` as your condition, and that would
+	 *		both define infile for you, and switch to the else block if it failed, all in one line, and then #ifdef WIN32.
+	 *		Since this is a Windows 10 only project, we only need to change to fopen_s.
+	 */
+	FILE* infile;
+	errno_t errcode = fopen_s(&infile, "links.json", "r");
+	rapidjson::ParseResult result;
+	if (errcode == 0) {
+		char inbuffer[8192]; // 8KB, should be fine unless you manage to have an unnecessarily large links file
+							 // Consider allowing users to configure this
+		rapidjson::FileReadStream instream(infile, inbuffer, 8192); // last argument is size of buffer, so again 8KB
+
+		result = Tilandis::Links::LinkDocument->ParseStream(instream);
+
+		fclose(infile);
 	}
 	else {
 		/* We couldn't read the file. There's no reason for multiple Tilandis processes to be reading the config at once,
 		 * so we're just going to reckon the file doesn't exist and assume a set of defaults (a.k.a. nothing)
 		 * In the highly unlikely event that some other program happens to have that file open at that *exact* moment,
 		 * this could cause issues, but unless you're an anti-virus program, having my files open is either a bug or a PEBKAC ;-) */
-		jsoncstr = "{}";
+		result = Tilandis::Links::LinkDocument->Parse("{}");
 	}
-	rapidjson::ParseResult result = Tilandis::Links::LinkDocument->Parse(jsoncstr);
-	if (!result) { return false; } // It failed
+	if (!result) {  // It failed
+		std::cerr << result.Code() << std::endl;
+		return false;
+	}
 	else { return true; }
 }
 
@@ -122,7 +129,7 @@ bool Tilandis::Links::SaveLinkDocument() {
 	rapidjson::Writer<rapidjson::StringBuffer> outwriter(outbuffer);
 	Tilandis::Links::LinkDocument->Accept(outwriter);
 
-	outfile << outbuffer.GetString << std::endl;
+	outfile << outbuffer.GetString() << std::endl;
 	outfile.close();
 
 	return true;

@@ -18,10 +18,18 @@
 #include "exceptions.h"
 
 int main() {
+	if (!Tilandis::Links::PrepareTheLinkDocument()) {
+		std::cerr << "Failed to prepare the link document." << std::endl;
+		return 1;
+	}
 	if (Tilandis::UsingCommandLine(__argc, __argv)) {
 		try {
 			if (Tilandis::DeleteMode) { Tilandis::Links::DeleteLink(); }
 			else { Tilandis::Links::CreateLink(); }
+		}
+		catch (Tilandis::Exceptions::BadCommandLine exc) {
+			std::cerr << exc.what() << std::endl;
+			return 1;
 		}
 	}
 	else {

@@ -39,7 +39,7 @@ Tilandis::Exceptions::BadLink::BadLink(const Tilandis::Exceptions::BadLink& copy
 		subtype = LaunchFailed;
 	}
 }
-const char* Tilandis::Exceptions::BadCommandLine::what() const throw() {
+const char* Tilandis::Exceptions::BadLink::what() const throw() {
 	if (subtype == NoSuchLink) { return "No link exists by the specified name."; }
 	else if (subtype == MissingFile) { return "A file or directory was not found."; }
 	else if (subtype == LaunchFailed) { return "The program failed to launch."; }

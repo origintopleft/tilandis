@@ -33,7 +33,7 @@ namespace Tilandis {
 		extern BadLink LaunchFailed;
 	}
 	namespace Links { // linkmgmt.cpp
-		extern rapidjson::Document *LinkDocument;
+		extern rapidjson::Document * LinkDocument;
 
 		extern bool CreateLink(); // Will get info from the above variables
 		extern bool DeleteLink();
