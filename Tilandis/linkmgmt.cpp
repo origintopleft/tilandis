@@ -57,7 +57,7 @@ bool Tilandis::Links::CreateLink() {
 	if (Tilandis::PathName.empty()) { throw Tilandis::Exceptions::MissingArg; }
 	if (Tilandis::LinkName.empty()) { throw Tilandis::Exceptions::MissingArg; }
 
-	if (Tilandis::Links::LinkDocument->HasMember((char*)Tilandis::LinkName.c_str())) { // we already have a link with that name
+	if (Tilandis::Links::LinkDocument->HasMember(Utility::UTF8Converter.to_bytes(Tilandis::LinkName).c_str())) { // we already have a link with that name
 		if (Tilandis::ForceLink) { // -f opt
 			Tilandis::Links::DeleteLink(); // reminder: these functions use the global variables in the Tilandis namespace because C++ doesn't have
 										   //			optional variables, at least not in the Pythonic sense where you can just declare args=None
@@ -75,20 +75,20 @@ bool Tilandis::Links::CreateLink() {
 	rapidjson::Value name;
 
 	// New object to add to the DOM
-	name.SetString((char*)Tilandis::LinkName.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
+	name.SetString(Utility::UTF8Converter.to_bytes(Tilandis::LinkName).c_str(), Tilandis::Links::LinkDocument->GetAllocator());
 	value.SetObject();
 	Tilandis::Links::LinkDocument->AddMember(name, value, Tilandis::Links::LinkDocument->GetAllocator());
-	rapidjson::Value& newlink = (*Tilandis::Links::LinkDocument)[(char*)Tilandis::LinkName.c_str()];
+	rapidjson::Value& newlink = (*Tilandis::Links::LinkDocument)[Utility::UTF8Converter.to_bytes(Tilandis::LinkName).c_str()];
 
 	// Path name
 	name.SetString("path");
-	value.SetString((char*)Tilandis::PathName.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
+	value.SetString(Utility::UTF8Converter.to_bytes(Tilandis::PathName).c_str(), Tilandis::Links::LinkDocument->GetAllocator());
 	newlink.AddMember(name, value, Tilandis::Links::LinkDocument->GetAllocator());
 
 	// Args
 	if (Tilandis::Args != L"") { //if we have them, anyway
 		name.SetString("args");
-		value.SetString((char*)Tilandis::Args.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
+		value.SetString(Utility::UTF8Converter.to_bytes(Tilandis::Args).c_str(), Tilandis::Links::LinkDocument->GetAllocator());
 		newlink.AddMember(name, value, Tilandis::Links::LinkDocument->GetAllocator());
 	}
 
@@ -96,7 +96,7 @@ bool Tilandis::Links::CreateLink() {
 	name.SetString("workdir");
 	if (Tilandis::WorkingDirectory != L"") { // has the user specified one?
 		// If we're in this block, yes
-		value.SetString((char*)Tilandis::WorkingDirectory.c_str(), Tilandis::Links::LinkDocument->GetAllocator());
+		value.SetString(Utility::UTF8Converter.to_bytes(Tilandis::WorkingDirectory).c_str(), Tilandis::Links::LinkDocument->GetAllocator());
 	}
 	else {
 		// Nope. Time to find it our damn selves.
@@ -135,7 +135,8 @@ bool Tilandis::Links::LaunchLink(const char * LinkName) {
 
 bool Tilandis::Links::SaveLinkDocument() {
 	std::ofstream outfile;
-	outfile.open("links.json");
+	std::string outfilename = Utility::UTF8Converter.to_bytes(Tilandis::BaseDirectory) + "\\links.json";
+	outfile.open(outfilename.c_str());
 
 	rapidjson::StringBuffer outbuffer;
 	rapidjson::Writer<rapidjson::StringBuffer> outwriter(outbuffer);

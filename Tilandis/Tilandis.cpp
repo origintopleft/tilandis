@@ -38,7 +38,16 @@ int main() {
 		try {
 			if (Tilandis::DeleteMode && Tilandis::CreateMode) { throw Tilandis::Exceptions::BadArgCombo; }
 			if (Tilandis::DeleteMode) { Tilandis::Links::DeleteLink(); }
-			if (Tilandis::CreateMode) { Tilandis::Links::CreateLink(); }
+			if (Tilandis::CreateMode) {
+				try {
+					Tilandis::Links::CreateLink();
+				}
+				catch (Tilandis::Exceptions::BadCommandLine exc) {
+					std::cerr << exc.what() << std::endl;
+					Sleep(2000);
+					return 1;
+				}
+			}
 			if (Tilandis::AddToRegistry) {
 				bool result = Tilandis::RegisterProtocol();
 				if (!result) {
@@ -49,6 +58,7 @@ int main() {
 		}
 		catch (Tilandis::Exceptions::BadCommandLine exc) {
 			std::cerr << exc.what() << std::endl;
+			Sleep(5000);
 			return 1;
 		}
 	}
