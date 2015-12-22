@@ -14,7 +14,7 @@
 #include <Windows.h>
 
 // Third party headers
-#include "XGetopt.cpp"
+#include "getopt.c"
 
 // Tilandis code
 #include "Tilandis.h"
@@ -34,7 +34,7 @@ int main() {
 		std::cerr << "Failed to prepare the link document." << std::endl;
 		return 1;
 	}
-	if (Tilandis::UsingCommandLine(__argc, (wchar_t**)__argv)) { // FIXME: Commandline processing, while it works, is extremely friggin weird because I wrote it stoned
+	if (Tilandis::UsingCommandLine(__argc, (wchar_t*)__argv)) { // FIXME: Commandline processing, while it works, is extremely friggin weird because I wrote it stoned
 		try {
 			if (Tilandis::DeleteMode && Tilandis::CreateMode) { throw Tilandis::Exceptions::BadArgCombo; }
 			if (Tilandis::DeleteMode) { Tilandis::Links::DeleteLink(); }

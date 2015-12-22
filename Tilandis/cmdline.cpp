@@ -2,7 +2,7 @@
 #include <string>
 #include <tchar.h>
 
-#include "XGetopt.h"
+#include "getopt.h"
 #include "Tilandis.h"
 #include "exceptions.h"
 
@@ -16,14 +16,14 @@ bool Tilandis::CreateMode = false;
 bool Tilandis::DeleteMode = false;
 bool Tilandis::ForceLink = false;
 
-bool Tilandis::UsingCommandLine(int argc, TCHAR *argv[]) {
+bool Tilandis::UsingCommandLine(int argc, wchar_t argv[]) {
 	int curarg;
 
 	if (argc < 3) { // 1 = "tilandis.exe", 2 = "tilandis.exe tilecreator:example"
 		return false;
 	}
 
-	while ((curarg = getopt(argc, argv, L"a:d:fn:p:r:w:")) != EOF) {
+	while ((curarg = getopt(argc, &argv, L"a:d:fn:p:r:w:")) != EOF) {
 		switch (curarg) {
 		case L'a':
 			Tilandis::Args = *optarg;
