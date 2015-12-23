@@ -23,7 +23,7 @@
 
 std::wstring Tilandis::BaseDirectory = L"";
 
-int main(int argc, wchar_t* argv) {
+int main(int argc, wchar_t* argv[]) {
 	wchar_t* argvzero = new wchar_t[65535];
 	GetModuleFileName(NULL, argvzero, 65535);
 

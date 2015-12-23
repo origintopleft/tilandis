@@ -125,10 +125,13 @@ bool Tilandis::Links::LaunchLink(const char * LinkName) {
 	rapidjson::Value& link = (*Tilandis::Links::LinkDocument)[LinkName];
 	std::cout << link["path"].GetString() << " in working directory " << link["workdir"].GetString();
 
-	std::wstring path = Utility::UTF8Converter.from_bytes(link["path"].GetString());
+	std::wstring path	 = Utility::UTF8Converter.from_bytes(link["path"].GetString());
 	std::wstring workdir = Utility::UTF8Converter.from_bytes(link["workdir"].GetString());
+	std::wstring args;
+	if (link.HasMember("args")) { args = Utility::UTF8Converter.from_bytes(link["args"].GetString()); }
+	else { args = L""; }
 
-	ShellExecute(NULL, NULL, path.c_str(), L"", workdir.c_str(), SW_SHOWDEFAULT);
+	ShellExecute(NULL, NULL, path.c_str(), args.c_str(), workdir.c_str(), SW_SHOWDEFAULT);
 	//Sleep(2000);
 	return true;
 }

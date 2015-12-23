@@ -18,7 +18,7 @@ bool Tilandis::CreateMode = false;
 bool Tilandis::DeleteMode = false;
 bool Tilandis::ForceLink = false;
 
-bool Tilandis::UsingCommandLine(int argc, wchar_t* argv) {
+bool Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
 	int curarg;
 
 	if (argc < 3) { // 1 = "tilandis.exe", 2 = "tilandis.exe tilecreator:example"
@@ -38,8 +38,9 @@ bool Tilandis::UsingCommandLine(int argc, wchar_t* argv) {
 
 	bool StillGoing = true;
 	int optindex = 0;
+	const wchar_t* optstring = L"a:d:fn:p:r:w:";
 	while (StillGoing) {
-		curarg = getopt_long(argc, &argv, L"a:d:fn:p:r:w:", long_options, &optindex);
+		curarg = getopt_long(argc, argv, optstring, long_options, &optindex);
 
 		if (curarg == -1) {
 			StillGoing = false;
