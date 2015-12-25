@@ -78,9 +78,10 @@ int main(int argc, wchar_t* argv[]) {
 			}
 			try {
 				if (!Tilandis::Links::LaunchLink(LinkName.c_str())) {
-					std::ofstream err;
-					err.open("tilandis.err");
-					err << LinkName;
+					std::wstring wincapt = Utility::UTF8Converter.from_bytes(LinkName);
+					wincapt.append(L": Failure to launch");
+					std::wstring errmsg = L"Tilandis failed to launch the link " + Utility::UTF8Converter.from_bytes(LinkName) + L". Check your configuration.";
+					MessageBox(NULL, errmsg.c_str(), wincapt.c_str(), MB_ICONERROR);
 				}
 			}
 			catch (Tilandis::Exceptions::BadLink exc) {
