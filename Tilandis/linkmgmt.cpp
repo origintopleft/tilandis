@@ -100,8 +100,7 @@ bool Tilandis::Links::CreateLink() {
 	}
 	else {
 		// Nope. Time to find it our damn selves.
-		value.SetString("C:\\", Tilandis::Links::LinkDocument->GetAllocator()); // FIXME: actually set up an autodetect for working dirs
-													// BULLSHIT: Need to also figure out how PathCchRemoveFileSpec works
+		value.SetString(Utility::basedir(Tilandis::PathName), Tilandis::Links::LinkDocument->GetAllocator());
 	}
 	newlink.AddMember(name, value, Tilandis::Links::LinkDocument->GetAllocator());
 
