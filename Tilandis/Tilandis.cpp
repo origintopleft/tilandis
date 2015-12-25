@@ -84,12 +84,10 @@ int main(int argc, wchar_t* argv[]) {
 				}
 			}
 			catch (Tilandis::Exceptions::BadLink exc) {
-				std::ofstream err;
-				err.open("E:\\tilandis.err");
-				err << LinkName << std::endl;
-				err.close();
-				std::cerr << LinkName << " " << exc.what() << std::endl;
-				Sleep(5000);
+				std::wstring wincapt = Utility::UTF8Converter.from_bytes(__argv[1]);
+				wincapt.append(L": Bad Link");
+				std::wstring errmsg = Utility::UTF8Converter.from_bytes(exc.what());
+				MessageBox(NULL, errmsg.c_str(), wincapt.c_str(), MB_ICONWARNING);
 				return 1;
 			}
 		}
