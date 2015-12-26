@@ -61,7 +61,7 @@ int wmain(int argc, wchar_t* argv[]) {
 	}
 	else {
 		if (argc == 1) {
-			Tilandis::PrintUsage(argv[0]);
+			Tilandis::PrintUsage(argv[0]); // TODO: make this run a GUI instead
 		}
 		else if (argc == 2) {
 			std::wstring LinkName = argv[1];

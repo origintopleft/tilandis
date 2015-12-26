@@ -19,8 +19,6 @@ bool Tilandis::ForceLink = false;
 bool Tilandis::LinkInAdminMode = false;
 
 bool Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
-	int curarg;
-
 	if (argc < 3) { // 1 = "tilandis.exe", 2 = "tilandis.exe tilecreator:example"
 		return false;
 	}
