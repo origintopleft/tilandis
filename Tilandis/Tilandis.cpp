@@ -37,11 +37,13 @@ int wmain(int argc, wchar_t* argv[]) {
 			if (Tilandis::DeleteMode) { Tilandis::Links::DeleteLink(); }
 			if (Tilandis::CreateMode) {
 				try {
-					Tilandis::Links::CreateLink();
+					bool success = Tilandis::Links::CreateLink();
+					if (!success) {
+						std::wcerr << Tilandis::Err << std::endl;
+					}
 				}
 				catch (Tilandis::Exceptions::BadCommandLine exc) {
 					std::wcerr << exc.what() << std::endl;
-					Sleep(2000);
 					return 1;
 				}
 			}
@@ -55,7 +57,6 @@ int wmain(int argc, wchar_t* argv[]) {
 		}
 		catch (Tilandis::Exceptions::BadCommandLine exc) {
 			std::wcerr << exc.what() << std::endl;
-			Sleep(5000);
 			return 1;
 		}
 	}
@@ -112,23 +113,23 @@ bool Tilandis::RegisterProtocol() {
 	HKEY registry;
 	DWORD regresult;
 	long result = RegCreateKeyEx(HKEY_CLASSES_ROOT, (wchar_t*)Tilandis::RegistryProtocolName.c_str(), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &registry, &regresult);
-	if (regresult == REG_OPENED_EXISTING_KEY) { std::cout << "note: this protocol's already registered with something" << std::endl; }
+	if (regresult == REG_OPENED_EXISTING_KEY) { std::wcout << "note: this protocol's already registered with something" << std::endl; }
 
-	result = RegSetValueEx(registry, TEXT("URL Protocol"), 0, REG_SZ, NULL, 0);
-	/*if (result != ERROR_SUCCESS) { // BULLSHIT: Even though it succeeds, it isn't returning ERROR_SUCCESS.
+	result = RegSetValueEx(registry, L"URL Protocol", 0, REG_SZ, NULL, 0);
+	if (result != ERROR_SUCCESS) {
 		return false;
-	}*/
+	}
 	HKEY subregistry;
 	result = RegCreateKeyEx(registry, L"shell\\open\\command", 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &subregistry, &regresult);
 
 	wchar_t* argvzero = new wchar_t[65535];
 	GetModuleFileName(NULL, argvzero, 65535);
-	std::stringstream regstringstream;
-	regstringstream << '"' << argvzero << "\" \"%1\"";
-	std::string regstring = regstringstream.str();
-	std::cout << argvzero << "  " << __argv[0] << std::endl;
-	unsigned const char* regbytes = (unsigned const char*)regstring.c_str();
-	result = RegSetValueEx(subregistry, NULL, 0, REG_SZ, regbytes, 65535);
+	std::wstringstream regstringstream;
+	regstringstream << L'"' << argvzero << L"\" \"%1\"";
+	std::wstring regstring = regstringstream.str();
+	std::wcout << argvzero << L"  " << std::endl;
+	const wchar_t* regbytes = regstring.c_str();
+	result = RegSetValueEx(subregistry, NULL, 0, REG_SZ, (LPBYTE) regbytes, 65535);
 	if (!result) { return false; }
 	return true;
 }
