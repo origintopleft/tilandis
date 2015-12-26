@@ -30,7 +30,7 @@ bool Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
 		// bool longstr = false; // possibly redundant
 		std::wstring curargstr; // shorthand for developer convenience. the compiler will probably optimize this one away
 		for (int curarg = 1; curarg < argc; curarg++) {
-			curargstr = *argv[curarg];
+			curargstr = argv[curarg];
 			if (lookingforarg) {
 				if (curargstr[0] == L'-') {
 					throw Tilandis::Exceptions::MissingArg;
@@ -41,17 +41,20 @@ bool Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
 				switch (curflag) {
 				case L'n': // -n
 					Tilandis::CreateMode = true;
-					Tilandis::PathName = resultarg;
+					Tilandis::LinkName = resultarg;
 					break;
 				case L'a': // -a
 					Tilandis::Args = resultarg;
+					break;
+				case L'p':
+					Tilandis::PathName = resultarg;
 					break;
 				case L'w': // -w
 					Tilandis::WorkingDirectory = resultarg;
 					break;
 				case L'd': // -d
 					Tilandis::DeleteMode = true;
-					Tilandis::PathName = resultarg;
+					Tilandis::LinkName = resultarg;
 					break;
 				case L'r':
 					Tilandis::AddToRegistry = true;
@@ -80,6 +83,10 @@ bool Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
 					curflag = L'a';
 					lookingforarg = true;
 					break;
+				case L'p':
+					curflag = L'p';
+					lookingforarg = true;
+					break;
 				case L'w':
 					curflag = L'w';
 					lookingforarg = true;
@@ -93,7 +100,7 @@ bool Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
 					lookingforarg = true;
 					break;
 				default:
-					std::wcerr << "Unrecognized argument: " << argv[curarg] << curargstr[1] << std::endl;
+					std::wcerr << "Unrecognized argument: " << curargstr << std::endl;
 					Tilandis::PrintUsage(argv[0]);
 					return false;
 				}
