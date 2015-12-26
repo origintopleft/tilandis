@@ -7,7 +7,7 @@
 // Home namespace
 namespace Tilandis {
 	// TODO: tristates
-	extern void PrintUsage();
+	extern void PrintUsage(std::wstring);
 
 	// cmdline.cpp
 	extern bool UsingCommandLine(int argc, wchar_t* argv[]);
@@ -21,6 +21,7 @@ namespace Tilandis {
 	extern bool CreateMode;
 	extern bool DeleteMode;
 	extern bool ForceLink;
+	extern bool LinkInAdminMode;
 
 	extern std::wstring BaseDirectory;
 
@@ -37,11 +38,11 @@ namespace Tilandis {
 		extern BadLink LaunchFailed;
 	}
 	namespace Links { // linkmgmt.cpp
-		extern rapidjson::Document * LinkDocument;
+		extern rapidjson::GenericDocument<rapidjson::UTF8<wchar_t>> * LinkDocument;
 
 		extern bool CreateLink(); // Will get info from the above variables
 		extern bool DeleteLink();
-		extern bool LaunchLink(const char *);
+		extern bool LaunchLink(const wchar_t *);
 
 		extern bool PrepareTheLinkDocument();
 		extern bool SaveLinkDocument();

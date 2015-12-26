@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "getopt.c"
 #include "Tilandis.h"
 #include "exceptions.h"
 
@@ -17,6 +16,7 @@ std::wstring Tilandis::RegistryProtocolName = L"";
 bool Tilandis::CreateMode = false;
 bool Tilandis::DeleteMode = false;
 bool Tilandis::ForceLink = false;
+bool Tilandis::LinkInAdminMode = false;
 
 bool Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
 	int curarg;
@@ -24,56 +24,80 @@ bool Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
 	if (argc < 3) { // 1 = "tilandis.exe", 2 = "tilandis.exe tilecreator:example"
 		return false;
 	}
+	else {
+		wchar_t curflag;
+		bool lookingforarg = false;
+		// bool longstr = false; // possibly redundant
+		std::wstring curargstr; // shorthand for developer convenience. the compiler will probably optimize this one away
+		for (int curarg = 1; curarg < argc; curarg++) {
+			curargstr = *argv[curarg];
+			if (lookingforarg) {
+				if (curargstr[0] == L'-') {
+					throw Tilandis::Exceptions::MissingArg;
+					return false;
+				}
 
-	static struct option long_options[] =
-	{
-		{ L"args", ARG_REQ, 0, L'a' },
-		{ L"newlink", ARG_REQ, 0, L'n' },
-		{ L"delete", ARG_REQ, 0, L'd' },
-		{ L"force", ARG_REQ, 0, L'f' },
-		{ L"path", ARG_REQ, 0, L'p' },
-		{ L"register", ARG_REQ, 0, L'r' },
-		{ L"workdir", ARG_REQ, 0, L'w' },
-	};
-
-	bool StillGoing = true;
-	int optindex = 0;
-	const wchar_t* optstring = L"a:d:fn:p:r:w:";
-	while (StillGoing) {
-		curarg = getopt_long(argc, argv, optstring, long_options, &optindex);
-
-		if (curarg == -1) {
-			StillGoing = false;
-		}
-		switch (curarg) {
-			case L'a':
-				Tilandis::Args = *optarg;
-				break;
-			case L'w':
-				Tilandis::WorkingDirectory = *optarg;
-				break;
-			case L'd':
-				Tilandis::DeleteMode = true;
-				Tilandis::LinkName = *optarg;
-				break;
-			case L'n':
-				Tilandis::CreateMode = true;
-				Tilandis::LinkName = *optarg;
-				break;
-			case L'p':
-				Tilandis::PathName = *optarg;
-				break;
-			case L'r':
-				Tilandis::AddToRegistry = true;
-				Tilandis::RegistryProtocolName = *optarg;
-				break;
-			case L'f':
-				Tilandis::ForceLink = true;
-			case L'?':
-				throw Tilandis::Exceptions::BadArgCombo;
-			default:
-				Tilandis::PrintUsage();
-				exit(1);
+				std::wstring resultarg = argv[curarg];
+				switch (curflag) {
+				case L'n': // -n
+					Tilandis::CreateMode = true;
+					Tilandis::PathName = resultarg;
+					break;
+				case L'a': // -a
+					Tilandis::Args = resultarg;
+					break;
+				case L'w': // -w
+					Tilandis::WorkingDirectory = resultarg;
+					break;
+				case L'd': // -d
+					Tilandis::DeleteMode = true;
+					Tilandis::PathName = resultarg;
+					break;
+				case L'r':
+					Tilandis::AddToRegistry = true;
+					Tilandis::RegistryProtocolName = resultarg;
+					break;
+				}
+				lookingforarg = false;
+			}
+			else {
+				if (curargstr[0] != L'-') {
+					throw Tilandis::Exceptions::MissingArg;
+					return false;
+				}
+				switch (curargstr[1]) {
+				case L'f':
+					Tilandis::ForceLink = true;
+					break;
+				case L'A':
+					Tilandis::LinkInAdminMode = true;
+					break;
+				case L'n':
+					curflag = L'n';
+					lookingforarg = true;
+					break;
+				case L'a':
+					curflag = L'a';
+					lookingforarg = true;
+					break;
+				case L'w':
+					curflag = L'w';
+					lookingforarg = true;
+					break;
+				case L'd':
+					curflag = L'd';
+					lookingforarg = true;
+					break;
+				case L'r':
+					curflag = L'r';
+					lookingforarg = true;
+					break;
+				default:
+					std::wcerr << "Unrecognized argument: " << argv[curarg] << curargstr[1] << std::endl;
+					Tilandis::PrintUsage(argv[0]);
+					return false;
+				}
+			}
 		}
 	}
 	return true; // If there was a problem it would have returned false by now

@@ -246,7 +246,7 @@ struct UTF16 {
 
     template<typename OutputStream>
     static void Encode(OutputStream& os, unsigned codepoint) {
-        RAPIDJSON_STATIC_ASSERT(sizeof(typename OutputStream::Ch) >= 2);
+        RAPIDJSON_STATIC_ASSERT(sizeof(typename OutputStream::Ch) >= 2); // FIXME: this is undefined?
         if (codepoint <= 0xFFFF) {
             RAPIDJSON_ASSERT(codepoint < 0xD800 || codepoint > 0xDFFF); // Code point itself cannot be surrogate pair 
             os.Put(static_cast<typename OutputStream::Ch>(codepoint));

@@ -13,9 +13,6 @@
 #include <tchar.h>
 #include <Windows.h>
 
-// Third party headers
-#include "getopt.h"
-
 // Tilandis code
 #include "Tilandis.h"
 #include "exceptions.h"
@@ -23,7 +20,7 @@
 
 std::wstring Tilandis::BaseDirectory = L"";
 
-int main(int argc, wchar_t* argv[]) {
+int wmain(int argc, wchar_t* argv[]) {
 	wchar_t* argvzero = new wchar_t[65535];
 	GetModuleFileName(NULL, argvzero, 65535);
 
@@ -31,7 +28,7 @@ int main(int argc, wchar_t* argv[]) {
 
 	Tilandis::BaseDirectory = Utility::basedir(argvzerostr);
 	if (!Tilandis::Links::PrepareTheLinkDocument()) {
-		std::cerr << "Failed to prepare the link document." << std::endl;
+		std::wcerr << "Failed to prepare the link document." << std::endl;
 		return 1;
 	}
 	if (Tilandis::UsingCommandLine(argc, argv)) { // FIXME: Commandline processing, while it works, is extremely friggin weird because I wrote it stoned
@@ -43,7 +40,7 @@ int main(int argc, wchar_t* argv[]) {
 					Tilandis::Links::CreateLink();
 				}
 				catch (Tilandis::Exceptions::BadCommandLine exc) {
-					std::cerr << exc.what() << std::endl;
+					std::wcerr << exc.what() << std::endl;
 					Sleep(2000);
 					return 1;
 				}
@@ -51,41 +48,42 @@ int main(int argc, wchar_t* argv[]) {
 			if (Tilandis::AddToRegistry) {
 				bool result = Tilandis::RegisterProtocol();
 				if (!result) {
-					std::cerr << "Failed to register Tilandis with specified protocol (hint: this function needs administrator rights)" << std::endl;
+					std::wcerr << "Failed to register Tilandis with specified protocol (hint: this function needs administrator rights)" << std::endl;
 					return 1;
 				}
 			}
 		}
 		catch (Tilandis::Exceptions::BadCommandLine exc) {
-			std::cerr << exc.what() << std::endl;
+			std::wcerr << exc.what() << std::endl;
 			Sleep(5000);
 			return 1;
 		}
 	}
 	else {
-		if (__argc == 1) {
-			Tilandis::PrintUsage();
+		if (argc == 1) {
+			Tilandis::PrintUsage(argv[0]);
 		}
-		else if (__argc == 2) {
-			std::string LinkName = __argv[1];
+		else if (argc == 2) {
+			std::wstring LinkName = argv[1];
 			size_t pos;
-			if ((pos = LinkName.find(":")) != std::string::npos) { // if we FIND a colon
+			if ((pos = LinkName.find(L":")) != std::wstring::npos) { // if we FIND a colon
 				LinkName.erase(0, pos + 1); // Remove protocols from the beginning
-				char nasties[] = "/\\\r\n";
-				for (size_t i = 0; i < strlen(nasties); ++i) { // slash removal
+				wchar_t nasties[] = L"/\\\r\n";
+				for (size_t i = 0; i < wcslen(nasties); ++i) { // slash removal
 					LinkName.erase(std::remove(LinkName.begin(), LinkName.end(), nasties[i]), LinkName.end());
 				}
 			}
 			try {
 				if (!Tilandis::Links::LaunchLink(LinkName.c_str())) {
-					std::wstring wincapt = Utility::UTF8Converter.from_bytes(LinkName);
+					std::wstring wincapt = LinkName;
 					wincapt.append(L": Failure to launch");
-					std::wstring errmsg = L"Tilandis failed to launch the link " + Utility::UTF8Converter.from_bytes(LinkName) + L". Check your configuration.";
+					std::wstring errmsg = L"Tilandis failed to launch the link " + LinkName + L". Check your configuration.";
 					MessageBox(NULL, errmsg.c_str(), wincapt.c_str(), MB_ICONERROR);
 				}
 			}
 			catch (Tilandis::Exceptions::BadLink exc) {
-				std::wstring wincapt = Utility::UTF8Converter.from_bytes(__argv[1]);
+				std::wstring wincapt; 
+				wincapt.assign(argv[1]);
 				wincapt.append(L": Bad Link");
 				std::wstring errmsg = Utility::UTF8Converter.from_bytes(exc.what());
 				MessageBox(NULL, errmsg.c_str(), wincapt.c_str(), MB_ICONWARNING);
@@ -97,18 +95,17 @@ int main(int argc, wchar_t* argv[]) {
 	return 0;
 }
 
-void Tilandis::PrintUsage() {
-	std::string myname = __argv[0];
-	std::cout << "Usage for " << myname << ":" << std::endl;
-	std::cout << '\t' << myname << " <link name> :: Launch a link" << std::endl;
-	std::cout << '\t' << myname << " -n <link name> <options> :: Create a link" << std::endl;
-	std::cout << '\t' << myname << " -d <link name> :: Delete a link" << std::endl;
-	std::cout << std::endl; // separating blank line
-	std::cout << "Options for -n include:" << std::endl;
-	std::cout << "\t-p <pathname> :: Required. Path to thing to launch (accepts URLs)" << std::endl;
-	std::cout << "\t-a <args> :: Arguments to pass to the program." << std::endl;
-	std::cout << "\t-w <directory> :: The working directory to launch the program in. Defaults to the same as the file location." << std::endl;
-	std::cout << "\t-f :: Replace any existing link with the same name. (Mnemonic: \"force\")" << std::endl;
+void Tilandis::PrintUsage(std::wstring arg0) {
+	std::wcout << "Usage for " << arg0 << ":" << std::endl;
+	std::wcout << '\t' << arg0 << " <link name> :: Launch a link" << std::endl;
+	std::wcout << '\t' << arg0 << " -n <link name> <options> :: Create a link" << std::endl;
+	std::wcout << '\t' << arg0 << " -d <link name> :: Delete a link" << std::endl;
+	std::wcout << std::endl; // separating blank line
+	std::wcout << "Options for -n include:" << std::endl;
+	std::wcout << "\t-p <pathname> :: Required. Path to thing to launch (accepts URLs)" << std::endl;
+	std::wcout << "\t-a <args> :: Arguments to pass to the program." << std::endl;
+	std::wcout << "\t-w <directory> :: The working directory to launch the program in. Defaults to the same as the file location." << std::endl;
+	std::wcout << "\t-f :: Replace any existing link with the same name. (Mnemonic: \"force\")" << std::endl;
 }
 
 bool Tilandis::RegisterProtocol() {
