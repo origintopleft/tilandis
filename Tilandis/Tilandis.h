@@ -1,8 +1,14 @@
 #pragma once
 #ifndef __TILANDIS_H
 #define __TILANDIS_H
+// Standard headers
+#include <algorithm>
+#include <iostream>
 #include <string>
+#include <fstream>
+#include <sstream>
 #include <tchar.h>
+#include <Windows.h>
 #include "rapidjson\document.h"
 // Home namespace
 namespace Tilandis {

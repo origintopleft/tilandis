@@ -4,23 +4,17 @@
  * Purpose: I'll make my own TileCreator proxy! With blackjack! And hookers!
  */
 
-// Standard headers
-#include <algorithm>
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <tchar.h>
-#include <Windows.h>
-
 // Tilandis code
 #include "Tilandis.h"
 #include "exceptions.h"
 #include "Utility.h"
 
 std::wstring Tilandis::BaseDirectory = L"";
-
-int wmain(int argc, wchar_t* argv[]) {
+int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int nShow) {
+	LPWSTR* argv;
+	int argc;
+	argv = CommandLineToArgvW(lpCmdLine, &argc);
+	std::wcout << argv << std::endl;
 	wchar_t* argvzero = new wchar_t[65535];
 	GetModuleFileName(NULL, argvzero, 65535);
 

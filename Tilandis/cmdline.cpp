@@ -27,7 +27,7 @@ bool Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
 		bool lookingforarg = false;
 		// bool longstr = false; // possibly redundant
 		std::wstring curargstr; // shorthand for developer convenience. the compiler will probably optimize this one away
-		for (int curarg = 1; curarg < argc; curarg++) {
+		for (int curarg = 0; curarg < argc; curarg++) {
 			curargstr = argv[curarg];
 			if (lookingforarg) {
 				if (curargstr[0] == L'-') {
