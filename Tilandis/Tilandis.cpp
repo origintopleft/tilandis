@@ -10,13 +10,15 @@
 #include "Utility.h"
 
 std::wstring Tilandis::BaseDirectory = L"";
-int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int nShow) {
+int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR, int nShow) {
+	// Note to self: Do not EVER, under ANY circumstances, use the lpCmdLine parameter passed to wWinMain
+	// That parameter is full of lies and deceit and cannot be trusted
 	LPWSTR* argv;
 	int argc;
-	argv = CommandLineToArgvW(lpCmdLine, &argc);
-	std::wcout << argv << std::endl;
+	argv = CommandLineToArgvW(GetCommandLineW(), &argc);
 	wchar_t* argvzero = new wchar_t[65535];
 	GetModuleFileName(NULL, argvzero, 65535);
+
 
 	std::wstring argvzerostr = argvzero;
 
