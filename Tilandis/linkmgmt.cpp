@@ -104,6 +104,11 @@ bool Tilandis::Links::CreateLink() {
 	}
 	newlink.AddMember(name, value, Tilandis::Links::LinkDocument->GetAllocator());
 
+	// Run as administrator?
+	name.SetString(L"asadmin");
+	value.SetBool(Tilandis::LinkInAdminMode);
+	newlink.AddMember(name, value, Tilandis::Links::LinkDocument->GetAllocator());
+
 	Tilandis::Links::SaveLinkDocument();
 	return true;
 }
