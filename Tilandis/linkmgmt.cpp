@@ -129,8 +129,15 @@ bool Tilandis::Links::LaunchLink(const wchar_t * LinkName) {
 	std::wstring args;
 	if (link.HasMember(L"args")) { args = link[L"args"].GetString(); }
 	else { args = L""; }
+	bool asadmin = false;
+	if (link.HasMember(L"asadmin")) { asadmin = link[L"asadmin"].GetBool(); }
 
-	ShellExecute(NULL, NULL, path.c_str(), args.c_str(), workdir.c_str(), SW_SHOWDEFAULT);
+	if (asadmin) {
+		ShellExecute(NULL, L"runas", path.c_str(), args.c_str(), workdir.c_str(), SW_SHOWDEFAULT);
+	}
+	else {
+		ShellExecute(NULL, NULL, path.c_str(), args.c_str(), workdir.c_str(), SW_SHOWDEFAULT);
+	}
 	//Sleep(2000);
 	return true;
 }
