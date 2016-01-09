@@ -39,7 +39,10 @@ int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR, int nShow) {
 					}
 				}
 				catch (Tilandis::Exceptions::BadCommandLine exc) {
-					std::wcout << exc.what() << std::endl;
+					wchar_t excwhat;
+					const char* excwhatmbs = exc.what();
+					mbstowcs_s(NULL, &excwhat, strlen(excwhatmbs) + 1, excwhatmbs, (size_t) 2048);
+					MessageBox(NULL, &excwhat, L"Tilandis", 0);
 					return 1;
 				}
 			}
@@ -113,7 +116,7 @@ bool Tilandis::RegisterProtocol() {
 	HKEY registry;
 	DWORD regresult;
 	long result = RegCreateKeyEx(HKEY_CLASSES_ROOT, (wchar_t*)Tilandis::RegistryProtocolName.c_str(), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &registry, &regresult);
-	if (regresult == REG_OPENED_EXISTING_KEY) { std::wcout << "note: this protocol's already registered with something" << std::endl; }
+	if (regresult == REG_OPENED_EXISTING_KEY) { MessageBox(NULL, L"note: this protocol's already registered with something", L"Tilandis", 0); }
 
 	result = RegSetValueEx(registry, L"URL Protocol", 0, REG_SZ, NULL, 0);
 	if (result != ERROR_SUCCESS) {
@@ -127,7 +130,6 @@ bool Tilandis::RegisterProtocol() {
 	std::wstringstream regstringstream;
 	regstringstream << L'"' << argvzero << L"\" \"%1\"";
 	std::wstring regstring = regstringstream.str();
-	std::wcout << argvzero << L"  " << std::endl;
 	const wchar_t* regbytes = regstring.c_str();
 	result = RegSetValueEx(subregistry, NULL, 0, REG_SZ, (LPBYTE) regbytes, 65535);
 	if (!result) { return false; }
