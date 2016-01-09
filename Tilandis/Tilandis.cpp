@@ -39,10 +39,11 @@ int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR, int nShow) {
 					}
 				}
 				catch (Tilandis::Exceptions::BadCommandLine exc) {
-					wchar_t excwhat;
-					const char* excwhatmbs = exc.what();
-					mbstowcs_s(NULL, &excwhat, strlen(excwhatmbs) + 1, excwhatmbs, (size_t) 2048);
-					MessageBox(NULL, &excwhat, L"Tilandis", 0);
+					wchar_t* excwhat = L"";
+					const char* excwhatmbs = "";
+					excwhatmbs = exc.what(); // we do it this way because the (reasonably) paranoid compiler doesn't reckon the pointer will always be initialized
+					mbstowcs_s(NULL, excwhat, strlen(excwhatmbs) + 1, excwhatmbs, (size_t) 2048);
+					MessageBox(NULL, excwhat, L"Tilandis", 0);
 					return 1;
 				}
 			}
