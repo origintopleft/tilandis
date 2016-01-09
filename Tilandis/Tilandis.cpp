@@ -3,7 +3,7 @@
  * by Nicholas "Lavacano" O'Connor
  * Purpose: I'll make my own TileCreator proxy! With blackjack! And hookers!
  */
-
+#include <iostream>
 // Tilandis code
 #include "Tilandis.h"
 #include "exceptions.h"
@@ -24,7 +24,7 @@ int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR, int nShow) {
 
 	Tilandis::BaseDirectory = Utility::basedir(argvzerostr);
 	if (!Tilandis::Links::PrepareTheLinkDocument()) {
-		std::wcerr << "Failed to prepare the link document." << std::endl;
+		std::wcout << "Failed to prepare the link document." << std::endl;
 		return 1;
 	}
 	if (Tilandis::UsingCommandLine(argc, argv)) { // FIXME: Commandline processing, while it works, is extremely friggin weird because I wrote it stoned
@@ -35,24 +35,28 @@ int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR, int nShow) {
 				try {
 					bool success = Tilandis::Links::CreateLink();
 					if (!success) {
-						std::wcerr << Tilandis::Err << std::endl;
+						std::wcout << Tilandis::Err << std::endl;
 					}
 				}
 				catch (Tilandis::Exceptions::BadCommandLine exc) {
-					std::wcerr << exc.what() << std::endl;
+					std::wcout << exc.what() << std::endl;
 					return 1;
 				}
 			}
 			if (Tilandis::AddToRegistry) {
 				bool result = Tilandis::RegisterProtocol();
 				if (!result) {
-					std::wcerr << "Failed to register Tilandis with specified protocol (hint: this function needs administrator rights)" << std::endl;
+					MessageBox(NULL, L"Failed to register Tilandis with specified protocol (hint: this function needs administrator rights)", L"Tilandis", 0);
 					return 1;
+				}
+				else {
+					MessageBox(NULL, L"Tilandis has \"successfully\" registered itself with the specified protocol.\r\nBe aware that though no error is reported, many failure cases aren't currently detected. You'll have to double-check the registry yourself.", L"Tilandis", 0);
+					return 0;
 				}
 			}
 		}
 		catch (Tilandis::Exceptions::BadCommandLine exc) {
-			std::wcerr << exc.what() << std::endl;
+			std::wcout << exc.what() << std::endl;
 			return 1;
 		}
 	}

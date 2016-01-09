@@ -27,7 +27,7 @@ bool Tilandis::Links::PrepareTheLinkDocument() {
 	 */
 	FILE* infile;
 	std::wstring configfilename = Tilandis::BaseDirectory + L"\\links.json";
-	std::wcerr << configfilename << std::endl;
+	//std::wcerr << configfilename << std::endl;
 	errno_t errcode = _wfopen_s(&infile, configfilename.c_str(), L"r");
 	rapidjson::ParseResult result;
 	if (errcode == 0) {
@@ -47,7 +47,7 @@ bool Tilandis::Links::PrepareTheLinkDocument() {
 		result = Tilandis::Links::LinkDocument->Parse(L"{}");
 	}
 	if (!result) {  // It failed
-		std::cerr << result.Code() << std::endl;
+		//std::cerr << result.Code() << std::endl;
 		return false;
 	}
 	else { return true; }

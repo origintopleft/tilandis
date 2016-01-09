@@ -97,7 +97,7 @@ bool Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
 					lookingforarg = true;
 					break;
 				default:
-					std::wcerr << "Unrecognized argument: " << curargstr << std::endl;
+					std::wcout << "Unrecognized argument: " << curargstr << std::endl;
 					Tilandis::PrintUsage(argv[0]);
 					return false;
 				}
