@@ -144,6 +144,11 @@ bool Tilandis::Links::LaunchLink(const wchar_t * LinkName) {
 		ShellExecute(NULL, NULL, path.c_str(), args.c_str(), workdir.c_str(), SW_SHOWDEFAULT);
 	}
 	//Sleep(2000);
+	wchar_t sys32[128];
+	GetEnvironmentVariable(L"WINDIR", sys32, sizeof(sys32));
+	wcscat_s(sys32, L"\\system32\\taskkill.exe");
+	//MessageBox(NULL, sys32, sys32, 0);
+	ShellExecute(NULL, NULL, sys32, L"/fi \"windowtitle eq TileCreator\"", NULL, SW_HIDE);
 	return true;
 }
 
