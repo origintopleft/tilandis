@@ -144,6 +144,9 @@ bool Tilandis::Links::LaunchLink(const wchar_t * LinkName) {
 		ShellExecute(NULL, NULL, path.c_str(), args.c_str(), workdir.c_str(), SW_SHOWDEFAULT);
 	}
 	//Sleep(2000);
+
+	// using taskkill to close TileCreator (nicely) behind us
+	// TODO: configurable
 	wchar_t sys32[128];
 	GetEnvironmentVariable(L"WINDIR", sys32, sizeof(sys32));
 	wcscat_s(sys32, L"\\system32\\taskkill.exe");
