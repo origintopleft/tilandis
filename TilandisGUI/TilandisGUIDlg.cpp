@@ -66,7 +66,7 @@ BEGIN_MESSAGE_MAP(CTilandisGUIDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_REGISTERPROTOCOL, &CTilandisGUIDlg::OnBnClickedRegisterprotocol)
-	ON_BN_CLICKED(IDC_CHECK1, &CTilandisGUIDlg::OnBnClickedCheck1)
+	ON_BN_CLICKED(IDC_PATHBROWSE, &CTilandisGUIDlg::OnBnClickedPathbrowse)
 END_MESSAGE_MAP()
 
 
@@ -169,7 +169,32 @@ void CTilandisGUIDlg::OnBnClickedRegisterprotocol()
 }
 
 
-void CTilandisGUIDlg::OnBnClickedCheck1()
+void CTilandisGUIDlg::OnBnClickedPathbrowse()
 {
-	// TODO: Add your control notification handler code here
+	IFileDialog *openbox = NULL;
+	COMDLG_FILTERSPEC filters[] = {
+		{L"Executable files", L"*.exe"},
+		{L"All files (yes, this works!)", L"*.*"}
+	};
+	HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&openbox));
+
+	if (!SUCCEEDED(hr)) {
+		MessageBox(L"Failed to create a file dialog.", L"Tilandis GUI");
+		return;
+	}
+
+	openbox->SetFileTypes(2, filters);
+	openbox->SetTitle(L"Program (or file) to launch");
+
+	hr = openbox->Show(m_hWnd);
+	if (SUCCEEDED(hr)) {
+		CComPtr<IShellItem> pItem;
+		if (!SUCCEEDED(openbox->GetResult(&pItem))) {
+			return;
+		}
+		LPOLESTR dispname = NULL;
+		pItem->GetDisplayName(SIGDN_FILESYSPATH, &dispname); // *dispname == "C:\Some\Path\File.name"
+
+		SetDlgItemText(IDC_PATHBOX, (LPWSTR)dispname);
+	}
 }

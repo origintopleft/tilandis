@@ -50,11 +50,11 @@ int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR, int nShow) {
 			if (Tilandis::AddToRegistry) {
 				bool result = Tilandis::RegisterProtocol();
 				if (!result) {
-					MessageBox(NULL, L"Failed to register Tilandis with specified protocol (hint: this function needs administrator rights)", L"Tilandis", 0);
+					MessageBox(NULL, L"Failed to register Tilandis with specified protocol (hint: this function needs administrator rights)", L"Tilandis", MB_ICONERROR);
 					return 1;
 				}
 				else {
-					MessageBox(NULL, L"Tilandis has \"successfully\" registered itself with the specified protocol.\r\nBe aware that though no error is reported, many failure cases aren't currently detected. You'll have to double-check the registry yourself.", L"Tilandis", 0);
+					MessageBox(NULL, L"Tilandis has \"successfully\" registered itself with the specified protocol.\r\nBe aware that though no error is reported, many failure cases aren't currently detected. If it still doesn't work, you'll have to double-check the registry yourself.", L"Tilandis", 0);
 					return 0;
 				}
 			}
@@ -133,6 +133,6 @@ bool Tilandis::RegisterProtocol() {
 	std::wstring regstring = regstringstream.str();
 	const wchar_t* regbytes = regstring.c_str();
 	result = RegSetValueEx(subregistry, NULL, 0, REG_SZ, (LPBYTE) regbytes, 65535);
-	if (!result) { return false; }
+	if (result != ERROR_SUCCESS) { return false; }
 	return true;
 }

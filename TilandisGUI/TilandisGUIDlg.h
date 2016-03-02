@@ -32,11 +32,11 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
-public:
-	afx_msg void OnBnClickedRegisterprotocol();
-protected:
+
 	// Button: "Register Tilandis"
 	CButton BTN_RegisterProtocol;
+
 public:
-	afx_msg void OnBnClickedCheck1();
+	afx_msg void OnBnClickedPathbrowse();
+	afx_msg void OnBnClickedRegisterprotocol();
 };
