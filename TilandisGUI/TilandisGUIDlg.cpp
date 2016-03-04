@@ -85,6 +85,7 @@ BEGIN_MESSAGE_MAP(CTilandisGUIDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_PATHBROWSE, &CTilandisGUIDlg::OnBnClickedPathbrowse)
 	ON_BN_CLICKED(IDC_WDBROWSE, &CTilandisGUIDlg::OnBnClickedWdbrowse)
 	ON_BN_CLICKED(IDC_DELETELINK, &CTilandisGUIDlg::OnBnClickedDeletelink)
+	ON_BN_CLICKED(IDC_CREATELINK, &CTilandisGUIDlg::OnBnClickedCreatelink)
 END_MESSAGE_MAP()
 
 
@@ -254,13 +255,46 @@ void CTilandisGUIDlg::OnBnClickedWdbrowse()
 
 void CTilandisGUIDlg::OnBnClickedDeletelink()
 {
-	wchar_t* str_name;
-	int int_result = EDT_NameBox.GetWindowText((LPTSTR) &str_name, 512);
+	LPWSTR str_name[512];
+	for (int i = 0; i < 512; i++) {
+		str_name[i] = '\0';
+	}
+	int length = EDT_NameBox.GetWindowText((LPTSTR) str_name, 512);
+	if (length < 1) {
+		MessageBox(L"You're supposed to put a link name in the box to the left. (That's the thing you type into TileCreator)", L"Tilandis GUI Error", MB_ICONERROR);
+		return;
+	}
 	wchar_t* str_delarg = L"-d ";
-	wchar_t str_del[8192]; // TODO: There's a less fucking stupid way to use wcscat_s but Visual Studio isn't
-						   //		giving me useful errors
-	wcscat_s(str_del, (size_t) 8192, (const wchar_t*) str_delarg);
-	wcscat_s(str_del, (size_t) 8192, (const wchar_t*) str_name);
+	wchar_t str_args[768];
+	for (int i = 0; i < 768; i++) {
+		str_args[i] = '\0';
+	}
+	wcscat_s(str_args, (size_t) 768, (const wchar_t*) str_delarg);
+	wcscat_s(str_args, (size_t) 768, (const wchar_t*) str_name);
 
+	ShellExecute(NULL, NULL, L"Tilandis.exe", str_args, NULL, 0);
+}
+
+
+void CTilandisGUIDlg::OnBnClickedCreatelink()
+{
+	LPWSTR str_name[512];
+	for (int i = 0; i < 512; i++) {
+		str_name[i] = '\0';
+	}
+	int length = EDT_NameBox.GetWindowText((LPTSTR) str_name, 512);
+	if (length < 1) {
+		MessageBox(L"You're supposed to put a link name in the box to the left. (That's the thing you type into TileCreator)", L"Tilandis GUI Error", MB_ICONERROR);
+		return;
+	}
+	wchar_t* str_newarg = L"-n ";
+	wchar_t str_args[768];
+	for (int i = 0; i < 768; i++) {
+		str_args[i] = '\0';
+	}
+	wcscat_s(str_args, (size_t) 768, (const wchar_t*) str_newarg);
+	wcscat_s(str_args, (size_t) 768, (const wchar_t*) str_name);
+
+	MessageBox((LPCWSTR) str_args);
 	ShellExecute(NULL, NULL, L"Tilandis.exe", str_del, NULL, 0);
 }

@@ -59,4 +59,5 @@ public:
 	afx_msg void OnBnClickedWdbrowse();
 	afx_msg void OnBnClickedDeletelink();
 
+	afx_msg void OnBnClickedCreatelink();
 };
