@@ -54,7 +54,8 @@ int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR, int nShow) {
 					return 1;
 				}
 				else {
-					MessageBox(NULL, L"Tilandis has \"successfully\" registered itself with the specified protocol.\r\nBe aware that though no error is reported, many failure cases aren't currently detected. If it still doesn't work, you'll have to double-check the registry yourself.", L"Tilandis", 0);
+					MessageBox(NULL, L"Tilandis has \"successfully\" registered itself with the specified protocol.\r\nBe aware that though no error is reported, many failure cases aren't currently detected. If it still doesn't work, you'll have to double-check the registry yourself.\n\n(Note: If you have TileCreator Proxy installed, you may have to change the associations in the Default Programs control panel.)",
+						L"Tilandis", 0);
 					return 0;
 				}
 			}

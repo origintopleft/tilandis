@@ -11,6 +11,20 @@
 #define new DEBUG_NEW
 #endif
 
+// from Tilandis/Utility.cpp
+// there's a TODO in TilandisGUIDlg.h about this
+std::wstring_convert<Utility::UTF8, wchar_t> Utility::UTF8Converter;
+
+std::wstring Utility::basedir(std::wstring path) {
+	size_t lastslash = path.find_last_of(L"\\"); // ignoring forward slash
+	if (lastslash != path.npos) {
+		return path.substr(0, lastslash);
+	}
+	else {
+		return path; // probably a URL
+	}
+}
+
 
 // CAboutDlg dialog used for App About
 
@@ -59,6 +73,8 @@ void CTilandisGUIDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_REGISTERPROTOCOL, BTN_RegisterProtocol);
+	DDX_Control(pDX, IDC_PATHBOX, EDT_PathBox);
+	DDX_Control(pDX, IDC_NAMEBOX, EDT_NameBox);
 }
 
 BEGIN_MESSAGE_MAP(CTilandisGUIDlg, CDialogEx)
@@ -67,6 +83,8 @@ BEGIN_MESSAGE_MAP(CTilandisGUIDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_REGISTERPROTOCOL, &CTilandisGUIDlg::OnBnClickedRegisterprotocol)
 	ON_BN_CLICKED(IDC_PATHBROWSE, &CTilandisGUIDlg::OnBnClickedPathbrowse)
+	ON_BN_CLICKED(IDC_WDBROWSE, &CTilandisGUIDlg::OnBnClickedWdbrowse)
+	ON_BN_CLICKED(IDC_DELETELINK, &CTilandisGUIDlg::OnBnClickedDeletelink)
 END_MESSAGE_MAP()
 
 
@@ -197,4 +215,52 @@ void CTilandisGUIDlg::OnBnClickedPathbrowse()
 
 		SetDlgItemText(IDC_PATHBOX, (LPWSTR)dispname);
 	}
+}
+
+
+void CTilandisGUIDlg::OnBnClickedWdbrowse()
+{
+	IFileDialog *openbox = NULL;
+	HRESULT hr_result = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&openbox));
+	DWORD openbox_opts;
+	openbox->GetOptions(&openbox_opts);
+	openbox->SetOptions(openbox_opts | FOS_PICKFOLDERS);
+
+	wchar_t str_path[MAX_PATH];
+	int int_result = EDT_PathBox.GetWindowText((LPTSTR) &str_path, MAX_PATH);
+
+	if (str_path > 0) {
+		std::wstring wstr_path = std::wstring(str_path);
+		std::wstring wstr_basedir = Utility::basedir(wstr_path);
+
+		IShellItem* startdir;
+		hr_result = SHCreateItemFromParsingName(wstr_basedir.c_str(), NULL, IID_PPV_ARGS(&startdir));
+		if (SUCCEEDED(hr_result)) { openbox->SetFolder(startdir); }
+	}
+	
+	hr_result = openbox->Show(m_hWnd);
+	if (SUCCEEDED(hr_result)) {
+		CComPtr<IShellItem> pItem;
+		if (!SUCCEEDED(openbox->GetResult(&pItem))) {
+			return;
+		}
+		LPOLESTR dispname = NULL;
+		pItem->GetDisplayName(SIGDN_FILESYSPATH, &dispname); // *dispname == "C:\Some\Path"
+
+		SetDlgItemText(IDC_WDBOX, (LPWSTR) dispname);
+	}
+}
+
+
+void CTilandisGUIDlg::OnBnClickedDeletelink()
+{
+	wchar_t* str_name;
+	int int_result = EDT_NameBox.GetWindowText((LPTSTR) &str_name, 512);
+	wchar_t* str_delarg = L"-d ";
+	wchar_t str_del[8192]; // TODO: There's a less fucking stupid way to use wcscat_s but Visual Studio isn't
+						   //		giving me useful errors
+	wcscat_s(str_del, (size_t) 8192, (const wchar_t*) str_delarg);
+	wcscat_s(str_del, (size_t) 8192, (const wchar_t*) str_name);
+
+	ShellExecute(NULL, NULL, L"Tilandis.exe", str_del, NULL, 0);
 }

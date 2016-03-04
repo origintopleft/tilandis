@@ -4,6 +4,19 @@
 
 #pragma once
 #include "afxwin.h"
+#include <string>
+#include <locale>
+#include <codecvt>
+
+// from Tilandis/Utility.h
+// TODO: move all Utility code into a separate DLL project? maybe?
+namespace Utility {
+	extern std::wstring basedir(std::wstring);
+
+	typedef std::codecvt_utf8<wchar_t> UTF8;
+
+	extern std::wstring_convert<UTF8, wchar_t> UTF8Converter;
+}
 
 
 // CTilandisGUIDlg dialog
@@ -35,8 +48,15 @@ protected:
 
 	// Button: "Register Tilandis"
 	CButton BTN_RegisterProtocol;
+	// Editbox: "Path or URL"
+	CEdit EDT_PathBox;
+	// Editbox: "Link Name"
+	CEdit EDT_NameBox;
 
 public:
 	afx_msg void OnBnClickedPathbrowse();
 	afx_msg void OnBnClickedRegisterprotocol();
+	afx_msg void OnBnClickedWdbrowse();
+	afx_msg void OnBnClickedDeletelink();
+
 };
