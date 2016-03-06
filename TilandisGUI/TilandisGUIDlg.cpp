@@ -75,6 +75,8 @@ void CTilandisGUIDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_REGISTERPROTOCOL, BTN_RegisterProtocol);
 	DDX_Control(pDX, IDC_PATHBOX, EDT_PathBox);
 	DDX_Control(pDX, IDC_NAMEBOX, EDT_NameBox);
+	DDX_Control(pDX, IDC_WDBOX, EDT_WDBox);
+	DDX_Control(pDX, IDC_ARGSBOX, EDT_ArgBox);
 }
 
 BEGIN_MESSAGE_MAP(CTilandisGUIDlg, CDialogEx)
@@ -214,7 +216,7 @@ void CTilandisGUIDlg::OnBnClickedPathbrowse()
 		LPOLESTR dispname = NULL;
 		pItem->GetDisplayName(SIGDN_FILESYSPATH, &dispname); // *dispname == "C:\Some\Path\File.name"
 
-		SetDlgItemText(IDC_PATHBOX, (LPWSTR)dispname);
+		EDT_PathBox.SetWindowText((LPWSTR)dispname);
 	}
 }
 
@@ -248,7 +250,7 @@ void CTilandisGUIDlg::OnBnClickedWdbrowse()
 		LPOLESTR dispname = NULL;
 		pItem->GetDisplayName(SIGDN_FILESYSPATH, &dispname); // *dispname == "C:\Some\Path"
 
-		SetDlgItemText(IDC_WDBOX, (LPWSTR) dispname);
+		EDT_WDBox.SetWindowText((LPWSTR) dispname);
 	}
 }
 
@@ -264,12 +266,13 @@ void CTilandisGUIDlg::OnBnClickedDeletelink()
 		MessageBox(L"You're supposed to put a link name in the box to the left. (That's the thing you type into TileCreator)", L"Tilandis GUI Error", MB_ICONERROR);
 		return;
 	}
-	wchar_t* str_delarg = L"-d ";
+
 	wchar_t str_args[768];
 	for (int i = 0; i < 768; i++) {
 		str_args[i] = '\0';
 	}
-	wcscat_s(str_args, (size_t) 768, (const wchar_t*) str_delarg);
+
+	wcscat_s(str_args, (size_t) 768, L"-d ");
 	wcscat_s(str_args, (size_t) 768, (const wchar_t*) str_name);
 
 	ShellExecute(NULL, NULL, L"Tilandis.exe", str_args, NULL, 0);
@@ -278,23 +281,76 @@ void CTilandisGUIDlg::OnBnClickedDeletelink()
 
 void CTilandisGUIDlg::OnBnClickedCreatelink()
 {
+	int length;
 	LPWSTR str_name[512];
 	for (int i = 0; i < 512; i++) {
 		str_name[i] = '\0';
 	}
-	int length = EDT_NameBox.GetWindowText((LPTSTR) str_name, 512);
+	length = EDT_NameBox.GetWindowText((LPTSTR) str_name, 512);
 	if (length < 1) {
 		MessageBox(L"You're supposed to put a link name in the box to the left. (That's the thing you type into TileCreator)", L"Tilandis GUI Error", MB_ICONERROR);
 		return;
 	}
-	wchar_t* str_newarg = L"-n ";
-	wchar_t str_args[768];
-	for (int i = 0; i < 768; i++) {
+
+	// String containing the full list of arguments to Tilandis
+	wchar_t str_args[2048]; // Create args could run for a lot longer
+	for (int i = 0; i < 2048; i++) {
 		str_args[i] = '\0';
 	}
-	wcscat_s(str_args, (size_t) 768, (const wchar_t*) str_newarg);
-	wcscat_s(str_args, (size_t) 768, (const wchar_t*) str_name);
+
+	// Name
+	wcscat_s(str_args, (size_t) 2048, L"-n \"");
+	wcscat_s(str_args, (size_t) 2048, (const wchar_t*) str_name);
+	wcscat_s(str_args, (size_t) 2048, L"\"");
+
+	// Path
+	LPWSTR str_path[MAX_PATH];
+	length = EDT_PathBox.GetWindowText((LPTSTR) str_path, MAX_PATH);
+	if (length < 1) {
+		MessageBox(L"You need to specify a path. This is the thing you actually launch.");
+		return;
+	}
+
+	wcscat_s(str_args, (size_t) 2048, L" -p \"");
+	wcscat_s(str_args, (size_t) 2048, (const wchar_t*) str_path);
+	wcscat_s(str_args, (size_t) 2048, L"\"");
+
+	// Working directory
+	LPWSTR str_workdir[MAX_PATH];
+	for (int i = 0; i < MAX_PATH; i++) {
+		str_workdir[i] = '\0';
+	}
+	length = EDT_WDBox.GetWindowText((LPTSTR) str_workdir, MAX_PATH);
+	if (length > 0) {
+		// User specified a working directory, lets define it
+		// We skip this arg if the user does, because the code to automatically determine the path is already
+		// in Tilandis itself (specifically, linkmgmt.cpp)
+		wcscat_s(str_args, (size_t) 2048, L" -w \"");
+		wcscat_s(str_args, (size_t) 2048, (const wchar_t*) str_workdir);
+		wcscat_s(str_args, (size_t) 2048, L"\"");
+	}
+	
+	// Arguments
+	LPWSTR str_linkargs[1024];
+	for (int i = 0; i < 1024; i++) {
+		str_linkargs[i] = '\0';
+	}
+	length = EDT_ArgBox.GetWindowText((LPTSTR) str_linkargs, 1024);
+	if (length > 0) {
+		// User specified args, lets define it
+		// We skip this arg if the user does, because no args = do nada
+		// Before we get into that though, we need to properly escape quotation marks
+		// that's easier to do with wstrings
+		// TODO: this is twiddly and somehow manages to replace the entire thing with just \"
+		std::wstring wstr_linkargs = (wchar_t*) str_linkargs;
+		wstr_linkargs.replace(wstr_linkargs.begin(), wstr_linkargs.end(), L"\"", L"\\\"");
+
+		// now we append the result to str_args
+		wcscat_s(str_args, (size_t) 2048, L" -a \"");
+		wcscat_s(str_args, (size_t) 2048, wstr_linkargs.c_str());
+		wcscat_s(str_args, (size_t) 2048, L"\"");
+	}
 
 	MessageBox((LPCWSTR) str_args);
-	ShellExecute(NULL, NULL, L"Tilandis.exe", str_del, NULL, 0);
+	ShellExecute(NULL, NULL, L"Tilandis.exe", str_args, NULL, 0);
 }

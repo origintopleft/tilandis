@@ -52,6 +52,10 @@ protected:
 	CEdit EDT_PathBox;
 	// Editbox: "Link Name"
 	CEdit EDT_NameBox;
+	// Editbox: "Working Directory"
+	CEdit EDT_WDBox;
+	// Editbox: "Arguments"
+	CEdit EDT_ArgBox;
 
 public:
 	afx_msg void OnBnClickedPathbrowse();
