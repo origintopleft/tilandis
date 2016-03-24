@@ -14,6 +14,8 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #include <Windows.h>
 #include "rapidjson\document.h"
 #include "resource.h"
+#include "tristate.h"
+
 // Home namespace
 namespace Tilandis {
 	// TODO: tristates

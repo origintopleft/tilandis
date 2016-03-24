@@ -124,6 +124,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Tilandis.h" />
     <ClInclude Include="tilectl.h" />
+    <ClInclude Include="tristate.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
