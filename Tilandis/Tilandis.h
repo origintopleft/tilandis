@@ -12,6 +12,7 @@
 #include "rapidjson\document.h"
 #include "resource.h"
 #include "tristate.h"
+#include "tilectl.h"
 
 // Home namespace
 namespace Tilandis {
@@ -68,6 +69,8 @@ namespace Tilandis {
 	}
 
 	extern bool RegisterProtocol();
+
+	extern bool ManipulateLinkDocument();
 }
 
 extern std::wstring basedir(std::wstring);

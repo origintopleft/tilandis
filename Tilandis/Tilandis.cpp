@@ -29,36 +29,9 @@ int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR, int nShow) {
 	}
 	if (Tilandis::UsingCommandLine(argc, argv)) { // FIXME: Commandline processing, while it works, is extremely friggin weird because I wrote it stoned
 		try {
-			if (Tilandis::DeleteMode && Tilandis::CreateMode) { throw Tilandis::Exceptions::BadArgCombo; }
-			if (Tilandis::DeleteMode) { Tilandis::Links::DeleteLink(); }
-			if (Tilandis::CreateMode) {
-				try {
-					bool success = Tilandis::Links::CreateLink();
-					if (!success) {
-						std::wcout << Tilandis::Err << std::endl;
-					}
-				}
-				catch (Tilandis::Exceptions::BadCommandLine exc) {
-					wchar_t* excwhat = L"";
-					const char* excwhatmbs = "";
-					excwhatmbs = exc.what(); // we do it this way because the (reasonably) paranoid compiler doesn't reckon the pointer will always be initialized
-					mbstowcs_s(NULL, excwhat, strlen(excwhatmbs) + 1, excwhatmbs, (size_t) 2048);
-					MessageBox(NULL, excwhat, L"Tilandis", 0);
-					return 1;
-				}
-			}
-			if (Tilandis::AddToRegistry) {
-				bool result = Tilandis::RegisterProtocol();
-				if (!result) {
-					MessageBox(NULL, L"Failed to register Tilandis with specified protocol (hint: this function needs administrator rights)", L"Tilandis", MB_ICONERROR);
-					return 1;
-				}
-				else {
-					MessageBox(NULL, L"Tilandis has \"successfully\" registered itself with the specified protocol.\r\nBe aware that though no error is reported, many failure cases aren't currently detected. If it still doesn't work, you'll have to double-check the registry yourself.\n\n(Note: If you have TileCreator Proxy installed, you may have to change the associations in the Default Programs control panel.)",
-						L"Tilandis", 0);
-					return 0;
-				}
-			}
+			bool result = Tilandis::ManipulateLinkDocument();
+			if (result) { return 0; }
+			else { return 1; }
 		}
 		catch (Tilandis::Exceptions::BadCommandLine exc) {
 			std::wcout << exc.what() << std::endl;
@@ -67,12 +40,36 @@ int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR, int nShow) {
 	}
 	else {
 		if (argc == 1) {
-			Tilandis::PrintUsage(argv[0]); // TODO: make this run a GUI instead
+			Tilandis::PrintUsage(argv[0]);
 		}
 		else if (argc == 2) {
 			std::wstring LinkName = argv[1];
 			size_t pos;
 			if ((pos = LinkName.find(L":")) != std::wstring::npos) { // if we FIND a colon
+				if (LinkName.substr(0, pos) == L"tilectl") {
+					switch (Tilandis::ParseTileCTL(LinkName)) {
+					case True:
+						try {
+							bool result = Tilandis::ManipulateLinkDocument();
+							if (result) { return 0; }
+							else { return 2; }
+						} catch (Tilandis::Exceptions::BadCommandLine exc) {
+							std::wcout << exc.what() << std::endl;
+							return 2;
+						}
+					case Mixed: // returns Mixed on "successful, but..."
+						try {
+							bool result = Tilandis::ManipulateLinkDocument();
+							if (result) { return 1; } else { return 2; }
+						} catch (Tilandis::Exceptions::BadCommandLine exc) {
+							std::wcout << exc.what() << std::endl;
+							return 2;
+						}
+						return 1;
+					case False:
+						return 2;
+					}
+				}
 				LinkName.erase(0, pos + 1); // Remove protocols from the beginning
 				wchar_t nasties[] = L"/\\\r\n";
 				for (size_t i = 0; i < wcslen(nasties); ++i) { // slash removal
@@ -136,4 +133,35 @@ bool Tilandis::RegisterProtocol() {
 	result = RegSetValueEx(subregistry, NULL, 0, REG_SZ, (LPBYTE) regbytes, 65535);
 	if (result != ERROR_SUCCESS) { return false; }
 	return true;
+}
+
+bool Tilandis::ManipulateLinkDocument() {
+	if (Tilandis::DeleteMode && Tilandis::CreateMode) { throw Tilandis::Exceptions::BadArgCombo; }
+	if (Tilandis::DeleteMode) { Tilandis::Links::DeleteLink(); }
+	if (Tilandis::CreateMode) {
+		try {
+			bool success = Tilandis::Links::CreateLink();
+			if (!success) {
+				std::wcout << Tilandis::Err << std::endl;
+			}
+		} catch (Tilandis::Exceptions::BadCommandLine exc) {
+			wchar_t* excwhat = L"";
+			const char* excwhatmbs = "";
+			excwhatmbs = exc.what(); // we do it this way because the (reasonably) paranoid compiler doesn't reckon the pointer will always be initialized
+			mbstowcs_s(NULL, excwhat, strlen(excwhatmbs) + 1, excwhatmbs, (size_t) 2048);
+			MessageBox(NULL, excwhat, L"Tilandis", 0);
+			return false;
+		}
+	}
+	if (Tilandis::AddToRegistry) {
+		bool result = Tilandis::RegisterProtocol();
+		if (!result) {
+			MessageBox(NULL, L"Failed to register Tilandis with specified protocol (hint: this function needs administrator rights)", L"Tilandis", MB_ICONERROR);
+			return 1;
+		} else {
+			MessageBox(NULL, L"Tilandis has \"successfully\" registered itself with the specified protocol.\r\nBe aware that though no error is reported, many failure cases aren't currently detected. If it still doesn't work, you'll have to double-check the registry yourself.\n\n(Note: If you have TileCreator Proxy installed, you may have to change the associations in the Default Programs control panel.)",
+				L"Tilandis", 0);
+			return true;
+		}
+	}
 }
