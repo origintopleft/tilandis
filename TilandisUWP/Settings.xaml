@@ -1,0 +1,30 @@
+﻿<Page
+    x:Class="TilandisUWP.Settings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TilandisUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="20,94,0,0" TextWrapping="Wrap" Text="Launching Apps" VerticalAlignment="Top" FontSize="26.667"/>
+        <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Margin="259,144,0,0" TextWrapping="Wrap" Text="Launch Protocol" VerticalAlignment="Top" FontSize="16" ToolTipService.ToolTip="Configure the protocol used to contact the link proxy and launch your apps. Defaults to &quot;tilandis&quot;." Height="32"/>
+        <TextBox x:Name="edt_launchprotocol" HorizontalAlignment="Left" Margin="30,144,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="220" ToolTipService.ToolTip="Configure the protocol used to contact the link proxy and launch your apps. Defaults to &quot;tilandis&quot;."/>
+        <TextBlock x:Name="textBlock1_Copy" HorizontalAlignment="Left" Margin="259,180,0,0" TextWrapping="Wrap" Text="Control Protocol" VerticalAlignment="Top" FontSize="16" ToolTipService.ToolTip="Configure the protocol used to speak with the link proxy using the TileCTL specification (or compatible). Defaults to &quot;tilectl&quot;." Height="32"/>
+        <TextBox x:Name="edt_ctlprotocol" HorizontalAlignment="Left" Margin="30,180,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="220" ToolTipService.ToolTip="Configure the protocol used to speak with the link proxy using the TileCTL specification (or compatible). Defaults to &quot;tilectl&quot;."/>
+        <TextBlock x:Name="textBlock2" HorizontalAlignment="Left" Margin="30,253,0,0" TextWrapping="Wrap" Text="These settings, if changed incorrectly, can cause Tilandis to stop working!" VerticalAlignment="Top" Foreground="#FFB21818"/>
+        <TextBlock x:Name="textBlock3" HorizontalAlignment="Left" Margin="30,274,0,0" TextWrapping="Wrap" Text="For best results, leave them alone unless someone tells you to change them." VerticalAlignment="Top"/>
+        <Button x:Name="button" Content="Request Protocol Association" HorizontalAlignment="Left" Margin="30,216,0,0" VerticalAlignment="Top" Width="220" ToolTipService.ToolTip="This button contacts the link proxy (via Control Protocol) and requests that it attempt to associate itself with the Launch Protocol."/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="182" Margin="564,28,0,0" VerticalAlignment="Top" Width="340">
+            <Grid>
+                <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Keep Open Source Alive" VerticalAlignment="Top" FontSize="26.667" Margin="28,0,0,0"/>
+                <TextBlock x:Name="textBlock4" HorizontalAlignment="Left" Margin="10,40,0,0" TextWrapping="Wrap" Text="This project is available free of charge, under the MIT license. Unfortunately, food and housing isn't. If you're willing to throw a couple dollars my way, I can afford the fancy lunchmeat!" VerticalAlignment="Top"/>
+                <Button x:Name="btn_paypal" Content="Donate" HorizontalAlignment="Left" Margin="126,137,0,0" VerticalAlignment="Top" ToolTipService.ToolTip="This opens a PayPal donation page in your browser."/>
+            </Grid>
+        </Border>
+        <TextBlock x:Name="textBlock_Copy1" HorizontalAlignment="Left" Margin="20,10,0,0" TextWrapping="Wrap" Text="Appearance" VerticalAlignment="Top" FontSize="26.667"/>
+        <CheckBox x:Name="checkBox" Content="Prefer Dark UI" HorizontalAlignment="Left" Margin="30,50,0,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Page>

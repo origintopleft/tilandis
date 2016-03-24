@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tilandis", "Tilandis\Tiland
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TilandisGUI", "TilandisGUI\TilandisGUI.vcxproj", "{70FF911F-A735-4190-B33F-6359F4CC84F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TilandisUWP", "TilandisUWP\TilandisUWP.csproj", "{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -37,6 +39,24 @@ Global
 		{70FF911F-A735-4190-B33F-6359F4CC84F4}.Release|x64.Build.0 = Release|x64
 		{70FF911F-A735-4190-B33F-6359F4CC84F4}.Release|x86.ActiveCfg = Release|Win32
 		{70FF911F-A735-4190-B33F-6359F4CC84F4}.Release|x86.Build.0 = Release|Win32
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Debug|ARM.ActiveCfg = Debug|ARM
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Debug|ARM.Build.0 = Debug|ARM
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Debug|ARM.Deploy.0 = Debug|ARM
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Debug|x64.ActiveCfg = Debug|x64
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Debug|x64.Build.0 = Debug|x64
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Debug|x64.Deploy.0 = Debug|x64
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Debug|x86.ActiveCfg = Debug|x86
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Debug|x86.Build.0 = Debug|x86
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Debug|x86.Deploy.0 = Debug|x86
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Release|ARM.ActiveCfg = Release|ARM
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Release|ARM.Build.0 = Release|ARM
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Release|ARM.Deploy.0 = Release|ARM
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Release|x64.ActiveCfg = Release|x64
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Release|x64.Build.0 = Release|x64
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Release|x64.Deploy.0 = Release|x64
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Release|x86.ActiveCfg = Release|x86
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Release|x86.Build.0 = Release|x86
+		{14A3AE42-4A6F-48E8-953E-BEAD4B661D24}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

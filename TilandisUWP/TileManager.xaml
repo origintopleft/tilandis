@@ -1,0 +1,35 @@
+﻿<Page
+    x:Class="TilandisUWP.TileManager"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TilandisUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <CollectionViewSource x:Name="cvs_tilehub" />
+    </Page.Resources>
+    
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Hub>
+            <HubSection>
+                <DataTemplate>
+                    <GridView x:Name="grdv_tiles" ItemsSource="{Binding Source={StaticResource cvs_tilehub}}" SelectionMode="None">
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding}" Width="310" Height="310" Stretch="UniformToFill" Margin="5" MaxWidth="310" MaxHeight="310" Tapped="clk_opentileeditor" />
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                        <GridView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsWrapGrid />
+                            </ItemsPanelTemplate>
+                        </GridView.ItemsPanel>
+                    </GridView>
+                </DataTemplate>
+            </HubSection>
+        </Hub>
+
+    </Grid>
+</Page>
