@@ -1,7 +1,4 @@
 #pragma once
-#pragma comment(linker,"\"/manifestdependency:type='win32' \
-name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
-processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #ifndef __TILANDIS_H
 #define __TILANDIS_H
 // Standard headers
@@ -14,13 +11,16 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #include <Windows.h>
 #include "rapidjson\document.h"
 #include "resource.h"
+#include "tristate.h"
+#include "tilectl.h"
+
 // Home namespace
 namespace Tilandis {
 	// TODO: tristates
 	extern void PrintUsage(std::wstring);
 
 	// cmdline.cpp
-	extern bool UsingCommandLine(int argc, wchar_t* argv[]);
+	extern tristate UsingCommandLine(int argc, wchar_t* argv[]);
 	extern std::wstring LinkName;
 	extern std::wstring PathName;
 	extern std::wstring WorkingDirectory;
@@ -69,6 +69,8 @@ namespace Tilandis {
 	}
 
 	extern bool RegisterProtocol();
+
+	extern bool ManipulateLinkDocument();
 }
 
 extern std::wstring basedir(std::wstring);

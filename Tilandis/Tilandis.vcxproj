@@ -114,6 +114,7 @@
   <ItemGroup>
     <ClCompile Include="cmdline.cpp" />
     <ClCompile Include="exceptions.cpp" />
+    <ClCompile Include="tilectl.cpp" />
     <ClCompile Include="linkmgmt.cpp" />
     <ClCompile Include="Tilandis.cpp" />
     <ClCompile Include="Utility.cpp" />
@@ -122,6 +123,8 @@
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Tilandis.h" />
+    <ClInclude Include="tilectl.h" />
+    <ClInclude Include="tristate.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
