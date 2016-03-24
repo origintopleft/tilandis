@@ -32,10 +32,14 @@ tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 		// Count the args so we know how long the for loop is going to be
 		// this enables the erase method so I don't have to think about the math
 		size_t andpos = 0;
-		int numargs = 1; // The below while loop will never run if there's only one argument
-						 // and we wouldn't have gotten this far if there were 0
-		while ((andpos = ctlcmd.find(L'&', andpos)) != ctlcmd.npos) { // for each & in the remaining ctlcmd
+		int numargs = 0;
+		while (true) {
+			andpos = ctlcmd.find(L'&', andpos + 1);
 			numargs++;
+			if (andpos == ctlcmd.npos) {
+				// out of &s
+				break;
+			}
 		}
 
 		for (int i = 0; i < numargs; i++) {
@@ -46,10 +50,7 @@ tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 			std::wstring option = curarg.substr(0, equalspos);
 			std::wstring value = curarg.substr(equalspos + 1, curarg.npos);
 
-			if (option == L"path") { Tilandis::PathName = value; }
-			else if (option == L"args") { Tilandis::Args = value; }
-			else if (option == L"workdir") { Tilandis::WorkingDirectory = value; }
-			else if (option == L"admin") {
+			if (option == L"path") { Tilandis::PathName = value; } else if (option == L"args") { Tilandis::Args = value; } else if (option == L"workdir") { Tilandis::WorkingDirectory = value; } else if (option == L"admin") {
 				std::transform(value.begin(), value.end(), value.begin(), ::towlower); // lowercase string
 
 				if (value == L"true") { Tilandis::LinkInAdminMode = true; }
@@ -75,7 +76,16 @@ tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 			throw Tilandis::Exceptions::MissingArg;
 			return False;
 		}
-		
+
 		Tilandis::CreateMode = true;
+		return True;
+	} else if (command == L"delete") {
+		if (Tilandis::LinkName == L"") {
+			throw Tilandis::Exceptions::MissingArg;
+			return False;
+		}
+
+		Tilandis::DeleteMode = true;
+		return True;
 	}
 }
