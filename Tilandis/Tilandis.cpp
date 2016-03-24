@@ -29,9 +29,21 @@ int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR, int nShow) {
 	}
 	if (Tilandis::UsingCommandLine(argc, argv)) { // FIXME: Commandline processing, while it works, is extremely friggin weird because I wrote it stoned
 		try {
-			bool result = Tilandis::ManipulateLinkDocument();
-			if (result) { return 0; }
-			else { return 1; }
+			if (Tilandis::AddToRegistry) {
+				bool result = Tilandis::RegisterProtocol();
+				if (!result) {
+					MessageBox(NULL, L"Failed to register Tilandis with specified protocol (hint: this function needs administrator rights)", L"Tilandis", MB_ICONERROR);
+					return 1;
+				} else {
+					MessageBox(NULL, L"Tilandis has \"successfully\" registered itself with the specified protocol.\r\nBe aware that though no error is reported, many failure cases aren't currently detected. If it still doesn't work, you'll have to double-check the registry yourself.\n\n(Note: If you have TileCreator Proxy installed, you may have to change the associations in the Default Programs control panel.)",
+						L"Tilandis", 0);
+					return 0;
+				}
+			} else {
+				bool result = Tilandis::ManipulateLinkDocument();
+				if (result) { return 0; }
+				else { return 1; }
+			}
 		}
 		catch (Tilandis::Exceptions::BadCommandLine exc) {
 			std::wcout << exc.what() << std::endl;
@@ -151,17 +163,6 @@ bool Tilandis::ManipulateLinkDocument() {
 			mbstowcs_s(NULL, excwhat, strlen(excwhatmbs) + 1, excwhatmbs, (size_t) 2048);
 			MessageBox(NULL, excwhat, L"Tilandis", 0);
 			return false;
-		}
-	}
-	if (Tilandis::AddToRegistry) {
-		bool result = Tilandis::RegisterProtocol();
-		if (!result) {
-			MessageBox(NULL, L"Failed to register Tilandis with specified protocol (hint: this function needs administrator rights)", L"Tilandis", MB_ICONERROR);
-			return 1;
-		} else {
-			MessageBox(NULL, L"Tilandis has \"successfully\" registered itself with the specified protocol.\r\nBe aware that though no error is reported, many failure cases aren't currently detected. If it still doesn't work, you'll have to double-check the registry yourself.\n\n(Note: If you have TileCreator Proxy installed, you may have to change the associations in the Default Programs control panel.)",
-				L"Tilandis", 0);
-			return true;
 		}
 	}
 }
