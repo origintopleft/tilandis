@@ -1,0 +1,26 @@
+﻿<Page
+    x:Class="TilandisUWP.TileEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TilandisUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Image x:Name="img_large" HorizontalAlignment="Left" Height="310" Margin="12,8,0,0" VerticalAlignment="Top" Width="310" Source="Assets/editor/310x310.png"/>
+        <Image x:Name="img_wide" HorizontalAlignment="Left" Height="150" Margin="12,323,0,0" VerticalAlignment="Top" Width="310" Source="Assets/editor/310x150.png"/>
+        <Image x:Name="img_med" HorizontalAlignment="Left" Height="150" Margin="172,478,0,0" VerticalAlignment="Top" Width="150" Source="Assets/editor/150x150.png"/>
+        <Image x:Name="img_small" HorizontalAlignment="Left" Height="71" Margin="96,478,0,0" VerticalAlignment="Top" Width="71" Source="Assets/editor/71x71.png"/>
+        <TextBox x:Name="edt_linkname" HorizontalAlignment="Left" Margin="342,54,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="349" ToolTipService.ToolTip="Make sure it matches in the proxy." PlaceholderText="Link Name"/>
+        <TextBox x:Name="edt_file" HorizontalAlignment="Left" Margin="342,92,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="314" ToolTipService.ToolTip="This could be any file on your system, theoretically, but we default to applications in the file picker because that's usually what you want." PlaceholderText="File Path"/>
+        <Button x:Name="btn_filebrowse" Content="..." HorizontalAlignment="Left" Margin="661,92,0,0" VerticalAlignment="Top" ToolTipService.ToolTip="Browse"/>
+        <TextBox x:Name="edt_workdir" HorizontalAlignment="Left" Margin="342,128,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="314" ToolTipService.ToolTip="Most programs will want the working directory to be the same place the executable is in. If you know your case is an exception, you can change it here." PlaceholderText="Working Directory"/>
+        <Button x:Name="btn_workdirbrowse" Content="..." HorizontalAlignment="Left" Margin="661,128,0,0" VerticalAlignment="Top" ToolTipService.ToolTip="Browse"/>
+        <TextBox x:Name="edt_args" HorizontalAlignment="Left" Margin="342,166,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="349" ToolTipService.ToolTip="Additional things to pass to the program on launch. Alternate names include &quot;parameters&quot;, &quot;launch options&quot; and &quot;command line switches&quot;." PlaceholderText="Arguments"/>
+        <Button x:Name="btn_pinme" Content="Save and Pin" HorizontalAlignment="Left" Margin="342,239,0,0" VerticalAlignment="Top" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Foreground="{ThemeResource SystemControlForegroundAltHighBrush}"/>
+        <Button x:Name="btn_save" Content="Save" HorizontalAlignment="Left" Margin="454,239,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="334,10,0,0" TextWrapping="Wrap" Text="Tile Editor" VerticalAlignment="Top" FontSize="24"/>
+        <CheckBox x:Name="checkBox" Content="Run as administrator" HorizontalAlignment="Left" Margin="342,203,0,0" VerticalAlignment="Top" ToolTipService.ToolTip="This is dangerous. Make sure you really need this. It helps to stick a UAC shield on your tile somewhere."/>
+    </Grid>
+</Page>
