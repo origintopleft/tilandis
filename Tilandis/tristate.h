@@ -31,7 +31,7 @@ enum tristate {
 	Mixed
 };
 
-tristate operator==(tristate& lhs, bool& rhs) {
+inline tristate operator==(tristate& lhs, bool& rhs) {
 	if (lhs == True) {
 		switch (rhs) {
 		case true:
@@ -65,7 +65,7 @@ tristate operator==(tristate& lhs, bool& rhs) {
 	}
 }
 
-bool operator==(bool& lhs, tristate& rhs) {
+inline bool operator==(bool& lhs, tristate& rhs) {
 	if (rhs == True) {
 		switch (lhs) {
 		case true:
