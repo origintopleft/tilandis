@@ -18,9 +18,9 @@ bool Tilandis::DeleteMode = false;
 bool Tilandis::ForceLink = false;
 bool Tilandis::LinkInAdminMode = false;
 
-bool Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
+tristate Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
 	if (argc < 3) { // 1 = "tilandis.exe", 2 = "tilandis.exe tilecreator:example"
-		return false;
+		return False;
 	}
 	else {
 		wchar_t curflag;
@@ -31,7 +31,7 @@ bool Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
 			if (lookingforarg) {
 				if (curargstr[0] == L'-') {
 					throw Tilandis::Exceptions::MissingArg;
-					return false;
+					return False;
 				}
 
 				std::wstring resultarg = argv[curarg];
@@ -63,7 +63,7 @@ bool Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
 			else {
 				if (curargstr[0] != L'-') {
 					throw Tilandis::Exceptions::MissingArg;
-					return false;
+					return False;
 				}
 				switch (curargstr[1]) {
 				case L'f':
@@ -99,10 +99,10 @@ bool Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
 				default:
 					std::wcout << "Unrecognized argument: " << curargstr << std::endl;
 					Tilandis::PrintUsage(argv[0]);
-					return false;
+					return False;
 				}
 			}
 		}
 	}
-	return true; // If there was a problem it would have returned false by now
+	return False; // If there was a problem it would have returned false by now
 }
