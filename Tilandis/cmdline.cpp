@@ -104,5 +104,5 @@ tristate Tilandis::UsingCommandLine(int argc, wchar_t* argv[]) {
 			}
 		}
 	}
-	return False; // If there was a problem it would have returned false by now
+	return True; // If there was a problem it would have returned false by now
 }
