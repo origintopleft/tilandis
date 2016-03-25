@@ -23,6 +23,11 @@ namespace TilandisUWP
         public Settings()
         {
             this.InitializeComponent();
+
+            edt_launchprotocol.Text = App.str_launchprotocol;
+            edt_ctlprotocol.Text = App.str_controlprotocol;
+
+            cbx_darkui.IsChecked = App.bool_darkUI;
         }
     }
 }
