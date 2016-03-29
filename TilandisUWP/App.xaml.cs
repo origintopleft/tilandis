@@ -8,6 +8,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -25,12 +26,8 @@ namespace TilandisUWP
         /// <summary>
         /// Configuration data.
         /// </summary>
-        public static bool bool_darkUI { get; set; }
-        public static string str_launchprotocol { get; set; }
-        public static string str_controlprotocol { get; set; }
-
-        // Internal use
-        private static Windows.Storage.StorageFolder dir_appfolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+        /// 
+        private static ApplicationDataContainer adc_local = ApplicationData.Current.LocalSettings;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -46,36 +43,19 @@ namespace TilandisUWP
             Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
                 Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
                 Microsoft.ApplicationInsights.WindowsCollectors.Session);
+
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
-            // Load config
-            Task.Run(() => LoadConfig());
+            default_setting("bool_darkui", false);
+            default_setting("str_launchprotocol", "tilandis");
+            default_setting("str_controlprotocol", "tilectl");
+            Random rng = new Random();
+            default_setting("int_port", rng.Next(50000, 60000));
         }
 
-        private static async Task LoadConfig() {
-            // load defaults first
-            bool_darkUI = false;
-            str_launchprotocol = "tilandis";
-            str_controlprotocol = "tilectl";
-            if (await dir_appfolder.TryGetItemAsync("config.cfg") != null) { // file exists
-                // This will only set the config options that are different from defaults.
-                Windows.Storage.StorageFile file_config = await dir_appfolder.GetFileAsync("config.cfg");
-                IList<string> iter_config = await Windows.Storage.FileIO.ReadLinesAsync(file_config);
-                foreach (string line in iter_config) {
-                    string[] split = line.Split('=');
-                    // an advantage of UWP is I don't have to worry about users mucking with the config files
-                    // so i don't have to lowercase everything in code
-                    if (split[0] == "darkui") {
-                        if (split[1] == "true") { bool_darkUI = true; }
-                        else { bool_darkUI = false; }
-                    } else if (split[0] == "launch") {
-                        str_launchprotocol = split[1];
-                    } else if (split[0] == "ctl") {
-                        str_controlprotocol = split[1];
-                    }
-                }
-            }
+        private static void default_setting<T>(string key, T value) {
+            if (!adc_local.Values.ContainsKey(key)) { adc_local.Values[key] = value; }
         }
 
         /// <summary>
@@ -144,7 +124,6 @@ namespace TilandisUWP
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
     }

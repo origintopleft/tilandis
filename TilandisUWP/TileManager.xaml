@@ -18,7 +18,7 @@
                     <GridView x:Name="grdv_tiles" ItemsSource="{Binding Source={StaticResource cvs_tilehub}}" SelectionMode="None">
                         <GridView.ItemTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding}" Width="310" Height="310" Stretch="UniformToFill" Margin="5" MaxWidth="310" MaxHeight="310" Tapped="clk_opentileeditor" />
+                                <Image Source="{Binding Path=Tile.str_largepath}" Width="310" Height="310" Stretch="UniformToFill" Margin="5" MaxWidth="310" MaxHeight="310" Tapped="clk_opentileeditor" />
                             </DataTemplate>
                         </GridView.ItemTemplate>
                         <GridView.ItemsPanel>

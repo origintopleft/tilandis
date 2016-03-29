@@ -31,8 +31,17 @@ namespace TilandisUWP
             SplitViewREF.Content = tm;
         }
 
-        private void clbk_open_tile_editor(object sender, EventArgs e) {
-            SplitViewREF.Content = new TileEditor();
+        private void clbk_open_tile_editor(object sender, TileEditorEventArgs e) {
+            TileEditor TileEditorREF = new TileEditor();
+
+            if (e.is_editing) {
+                if (e.target_tile == "dota2") {
+                    TileEditorREF.bmi_largetile.UriSource = new Uri(BaseUri, "/Assets/dev_temp/dotatile.png");
+                    TileEditorREF.bmi_widetile.UriSource = new Uri(BaseUri, "/Assets/dev_temp/dotatile_wide.png");
+                }
+            }
+
+            SplitViewREF.Content = TileEditorREF;
         }
 
         private void clk_nav_flyout(object sender, PointerRoutedEventArgs e) {

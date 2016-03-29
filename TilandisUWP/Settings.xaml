@@ -13,9 +13,9 @@
         <TextBox x:Name="edt_launchprotocol" HorizontalAlignment="Left" Margin="30,144,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="220" ToolTipService.ToolTip="Configure the protocol used to contact the link proxy and launch your apps. Defaults to &quot;tilandis&quot;."/>
         <TextBlock x:Name="textBlock1_Copy" HorizontalAlignment="Left" Margin="259,180,0,0" TextWrapping="Wrap" Text="Control Protocol" VerticalAlignment="Top" FontSize="16" ToolTipService.ToolTip="Configure the protocol used to speak with the link proxy using the TileCTL specification (or compatible). Defaults to &quot;tilectl&quot;." Height="32"/>
         <TextBox x:Name="edt_ctlprotocol" HorizontalAlignment="Left" Margin="30,180,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="220" ToolTipService.ToolTip="Configure the protocol used to speak with the link proxy using the TileCTL specification (or compatible). Defaults to &quot;tilectl&quot;."/>
-        <TextBlock x:Name="textBlock2" HorizontalAlignment="Left" Margin="30,253,0,0" TextWrapping="Wrap" Text="These settings, if changed incorrectly, can cause Tilandis to stop working!" VerticalAlignment="Top" Foreground="#FFB21818"/>
-        <TextBlock x:Name="textBlock3" HorizontalAlignment="Left" Margin="30,274,0,0" TextWrapping="Wrap" Text="For best results, leave them alone unless someone tells you to change them." VerticalAlignment="Top"/>
-        <Button x:Name="button" Content="Request Protocol Association" HorizontalAlignment="Left" Margin="30,216,0,0" VerticalAlignment="Top" Width="220" ToolTipService.ToolTip="This button contacts the link proxy (via Control Protocol) and requests that it attempt to associate itself with the Launch Protocol."/>
+        <TextBlock x:Name="textBlock2" HorizontalAlignment="Left" Margin="30,289,0,0" TextWrapping="Wrap" Text="These settings, if changed incorrectly, can cause Tilandis to stop working!" VerticalAlignment="Top" Foreground="#FFB21818"/>
+        <TextBlock x:Name="textBlock3" HorizontalAlignment="Left" Margin="30,310,0,0" TextWrapping="Wrap" Text="For best results, leave them alone unless someone tells you to change them." VerticalAlignment="Top"/>
+        <Button x:Name="button" Content="Request Protocol Association" HorizontalAlignment="Left" Margin="30,252,0,0" VerticalAlignment="Top" Width="220" ToolTipService.ToolTip="This button contacts the link proxy (via Control Protocol) and requests that it attempt to associate itself with the Launch Protocol."/>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="182" Margin="564,28,0,0" VerticalAlignment="Top" Width="340">
             <Grid>
                 <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Keep Open Source Alive" VerticalAlignment="Top" FontSize="26.667" Margin="28,0,0,0"/>
@@ -25,6 +25,8 @@
         </Border>
         <TextBlock x:Name="textBlock_Copy1" HorizontalAlignment="Left" Margin="20,10,0,0" TextWrapping="Wrap" Text="Appearance" VerticalAlignment="Top" FontSize="26.667"/>
         <CheckBox x:Name="cbx_darkui" Content="Prefer Dark UI" HorizontalAlignment="Left" Margin="30,50,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlock1_Copy1" HorizontalAlignment="Left" Margin="259,216,0,0" TextWrapping="Wrap" Text="Response Port" VerticalAlignment="Top" FontSize="16" ToolTipService.ToolTip="This is any valid number between 1024-65535. Tilandis UWP picks a number between 50000-60000 on first run, because it's highly unlikely for any other applications to be using these ports. If you're having problems getting a response from the proxy, you might try changing this." Height="32"/>
+        <TextBox x:Name="edt_resport" HorizontalAlignment="Left" Margin="30,216,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="220" ToolTipService.ToolTip="This is any valid number between 1024-65535. Tilandis UWP picks a number between 50000-60000 on first run, because it's highly unlikely for any other applications to be using these ports. If you're having problems getting a response from the proxy, you might try changing this." InputScope="Digits"/>
 
     </Grid>
 </Page>

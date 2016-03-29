@@ -17,17 +17,24 @@ using Windows.UI.Xaml.Navigation;
 
 namespace TilandisUWP {
     public class Tile {
-        string str_largepath, str_medpath, str_widepath, str_smallpath;
+        public string str_largepath, str_medpath, str_widepath, str_smallpath;
         public Tile() {
             str_largepath = "";
             str_medpath = "";
             str_widepath = "";
             str_smallpath = "";
         }
+    }
 
-        public void set_large(string path) {
-            str_largepath = path;
-            if (str_medpath == "") { str_medpath = path; } // required to provide a medium tile
+    /// <summary>
+    /// For passing arguments to launching the tile editor (like which tile to edit)
+    /// </summary>
+    public sealed partial class TileEditorEventArgs : EventArgs {
+        public bool is_editing;
+        public string target_tile;
+        public TileEditorEventArgs(bool is_editing, string target_tile) {
+            this.is_editing = is_editing;
+            this.target_tile = target_tile;
         }
     }
 
@@ -35,21 +42,36 @@ namespace TilandisUWP {
     /// Tile management page. Displays all tiles.
     /// </summary>
     public sealed partial class TileManager : Page {
-        public delegate void eventhandler(object source, EventArgs e);
+        public delegate void eventhandler(object source, TileEditorEventArgs e);
         public event eventhandler RequestTileEditor;
 
-        List<string> tiles;
+        bool tedt_editing;
+        string tedt_target;
+
+        List<Tile> tiles;
 
         public TileManager()
         {
             this.InitializeComponent();
-            tiles = new List<string>();
+            tiles = new List<Tile>();
 
-            // TEMP: add the Dota 2 tile image
-            tiles.Add("Assets/dev_temp/as2tile.png");
-            tiles.Add("Assets/dev_temp/bj3tile.png");
-            tiles.Add("Assets/dev_temp/citskytile.png");
-            tiles.Add("Assets/dev_temp/dotatile.png");
+            // TEMP
+            Tile tile_as2 = new Tile();
+            tile_as2.str_largepath = "Assets/dev_temp/as2tile.png";
+            tiles.Add(tile_as2);
+
+            Tile tile_bj3 = new Tile();
+            tile_bj3.str_largepath = "Assets/dev_temp/bj3tile.png";
+            tiles.Add(tile_bj3);
+
+            Tile tile_citsky = new Tile();
+            tile_citsky.str_largepath = "Assets/dev_temp/citskytile.png";
+            tiles.Add(tile_citsky);
+
+            Tile tile_dota2 = new Tile();
+            tile_dota2.str_largepath = "Assets/dev_temp/dotatile.png";
+            tiles.Add(tile_dota2);
+
             cvs_tilehub.Source = tiles;
         }
 

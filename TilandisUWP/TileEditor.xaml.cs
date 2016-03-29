@@ -20,22 +20,23 @@ namespace TilandisUWP {
     /// Tile editor screen. Users can configure tile images and launch settings here.
     /// </summary>
     public sealed partial class TileEditor : Page {
+        public BitmapImage bmi_largetile = new BitmapImage();
+        public BitmapImage bmi_widetile = new BitmapImage();
+        public BitmapImage bmi_medtile = new BitmapImage();
+        public BitmapImage bmi_smalltile = new BitmapImage();
+
         public TileEditor() {
             this.InitializeComponent();
 
-            BitmapImage bmi_largetile = new BitmapImage();
-            BitmapImage bmi_widetile = new BitmapImage();
-            BitmapImage bmi_medtile = new BitmapImage();
-            BitmapImage bmi_smalltile = new BitmapImage();
-
-            // TEMP:
-            bmi_largetile.UriSource = new Uri(this.BaseUri, "/Assets/dev_temp/dotatile.png");
-            bmi_widetile.UriSource = new Uri(this.BaseUri, "/Assets/dev_temp/dotatile_wide.png");
+            bmi_largetile.UriSource = new Uri(BaseUri, "/Assets/editor/310x310.png");
+            bmi_widetile.UriSource = new Uri(BaseUri, "/Assets/editor/310x150.png");
+            bmi_medtile.UriSource = new Uri(BaseUri, "/Assets/editor/150x150.png");
+            bmi_smalltile.UriSource = new Uri(BaseUri, "/Assets/editor/71x71.png");
 
             img_large.Source = bmi_largetile;
             img_wide.Source = bmi_widetile;
+            img_med.Source = bmi_medtile;
+            img_small.Source = bmi_smalltile;
         }
-
-
     }
 }
