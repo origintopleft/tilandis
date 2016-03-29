@@ -128,9 +128,15 @@
     <Content Include="Assets\dev_temp\citskytile.png" />
     <Content Include="Assets\dev_temp\dotatile.png" />
     <Content Include="Assets\editor\150x150.png" />
+    <Content Include="Assets\editor\150x150d.png" />
     <Content Include="Assets\editor\310x150.png" />
+    <Content Include="Assets\editor\310x150d.png" />
     <Content Include="Assets\editor\310x310.png" />
+    <Content Include="Assets\editor\310x310d.png" />
     <Content Include="Assets\editor\71x71.png" />
+    <Content Include="Assets\editor\71x71d.png" />
+    <Content Include="Assets\editor\newtile.png" />
+    <Content Include="Assets\editor\newtiled.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

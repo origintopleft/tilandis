@@ -17,12 +17,13 @@ using Windows.UI.Xaml.Navigation;
 
 namespace TilandisUWP {
     public class Tile {
-        public string str_largepath, str_medpath, str_widepath, str_smallpath;
+        public string str_largepath, str_medpath, str_widepath, str_smallpath, str_name;
         public Tile() {
             str_largepath = "";
             str_medpath = "";
             str_widepath = "";
             str_smallpath = "";
+            str_name = "";
         }
     }
 
@@ -76,7 +77,8 @@ namespace TilandisUWP {
         }
 
         private void clk_opentileeditor(object sender, TappedRoutedEventArgs e) {
-            RequestTileEditor(this, null);
+            TileEditorEventArgs teev = new TileEditorEventArgs(false, "");
+            RequestTileEditor(this, teev);
         }
     }
 }
