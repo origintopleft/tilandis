@@ -30,10 +30,10 @@ namespace TilandisUWP
             cbx_darkui.IsChecked = (bool) App.adc_local.Values["bool_darkui"];
         }
 
-        private void clbk_launchprotocol_edited(TextBox sender, TextCompositionEndedEventArgs args) {
+        private void clbk_launchprotocol_edited(object sender, TextChangedEventArgs args) {
             App.adc_local.Values["str_launchprotocol"] = edt_launchprotocol.Text;
         }
-        private void clbk_ctlprotocol_edited(TextBox sender, TextCompositionEndedEventArgs args) {
+        private void clbk_ctlprotocol_edited(object sender, TextChangedEventArgs args) {
             App.adc_local.Values["str_controlprotocol"] = edt_ctlprotocol.Text;
         }
 
