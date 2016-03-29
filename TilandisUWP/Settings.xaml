@@ -24,7 +24,7 @@
             </Grid>
         </Border>
         <TextBlock x:Name="textBlock_Copy1" HorizontalAlignment="Left" Margin="20,10,0,0" TextWrapping="Wrap" Text="Appearance" VerticalAlignment="Top" FontSize="26.667"/>
-        <CheckBox x:Name="cbx_darkui" Content="Prefer Dark UI" HorizontalAlignment="Left" Margin="30,50,0,0" VerticalAlignment="Top" Click="clk_darkuibox"/>
+        <CheckBox x:Name="cbx_darkui" Content="Prefer Dark UI (requires app restart)" HorizontalAlignment="Left" Margin="30,50,0,0" VerticalAlignment="Top" Click="clk_darkuibox"/>
         <TextBlock x:Name="textBlock1_Copy1" HorizontalAlignment="Left" Margin="259,216,0,0" TextWrapping="Wrap" Text="Response Port" VerticalAlignment="Top" FontSize="16" ToolTipService.ToolTip="This is any valid number between 1024-65535. Tilandis UWP picks a number between 50000-60000 on first run, because it's highly unlikely for any other applications to be using these ports. If you're having problems getting a response from the proxy, you might try changing this." Height="32"/>
         <TextBox x:Name="edt_resport" HorizontalAlignment="Left" Margin="30,216,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="220" ToolTipService.ToolTip="This is any valid number between 1024-65535. Tilandis UWP picks a number between 50000-60000 on first run, because it's highly unlikely for any other applications to be using these ports. If you're having problems getting a response from the proxy, you might try changing this." InputScope="Digits"/>
 
