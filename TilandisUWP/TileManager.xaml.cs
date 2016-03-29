@@ -71,13 +71,26 @@ namespace TilandisUWP {
 
             Tile tile_dota2 = new Tile();
             tile_dota2.str_largepath = "Assets/dev_temp/dotatile.png";
+            tile_dota2.str_name = "dota2";
             tiles.Add(tile_dota2);
+
+            Tile stile_newtile = new Tile();
+            stile_newtile.str_name = "_new";
+            if (App.is_dark) { stile_newtile.str_largepath = "Assets/editor/newtiled.png"; }
+            else { stile_newtile.str_largepath = "Assets/editor/newtile.png"; }
+            tiles.Add(stile_newtile);
 
             cvs_tilehub.Source = tiles;
         }
 
         private void clk_opentileeditor(object sender, TappedRoutedEventArgs e) {
-            TileEditorEventArgs teev = new TileEditorEventArgs(false, "");
+            Image img_sender = (Image) sender;
+            TileEditorEventArgs teev;
+            if (((string) img_sender.Tag) == "_new") {
+                teev = new TileEditorEventArgs(false, "");
+            } else {
+                teev = new TileEditorEventArgs(true, (string) img_sender.Tag);
+            }
             RequestTileEditor(this, teev);
         }
     }

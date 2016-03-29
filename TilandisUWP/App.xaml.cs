@@ -28,6 +28,7 @@ namespace TilandisUWP
         /// </summary>
         /// 
         public static ApplicationDataContainer adc_local = ApplicationData.Current.LocalSettings;
+        public static bool is_dark;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -53,8 +54,14 @@ namespace TilandisUWP
             Random rng = new Random();
             default_setting("int_port", rng.Next(50000, 60000));
 
-            if ((bool) adc_local.Values["bool_darkui"] == true) { RequestedTheme = ApplicationTheme.Dark; }
-            else { RequestedTheme = ApplicationTheme.Light; }
+            if ((bool) adc_local.Values["bool_darkui"] == true) {
+                RequestedTheme = ApplicationTheme.Dark;
+                is_dark = true;
+            }
+            else {
+                RequestedTheme = ApplicationTheme.Light;
+                is_dark = false;
+            }
         }
 
         private static void default_setting<T>(string key, T value) {
