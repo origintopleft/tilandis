@@ -27,7 +27,7 @@ namespace TilandisUWP
         /// Configuration data.
         /// </summary>
         /// 
-        private static ApplicationDataContainer adc_local = ApplicationData.Current.LocalSettings;
+        public static ApplicationDataContainer adc_local = ApplicationData.Current.LocalSettings;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -52,6 +52,9 @@ namespace TilandisUWP
             default_setting("str_controlprotocol", "tilectl");
             Random rng = new Random();
             default_setting("int_port", rng.Next(50000, 60000));
+
+            if ((bool) adc_local.Values["bool_darkui"] == true) { RequestedTheme = ApplicationTheme.Dark; }
+            else { RequestedTheme = ApplicationTheme.Light; }
         }
 
         private static void default_setting<T>(string key, T value) {
