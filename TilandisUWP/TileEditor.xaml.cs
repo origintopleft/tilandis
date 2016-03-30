@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -60,9 +62,73 @@ namespace TilandisUWP {
             this_tile["str_smallpath"] = bmi_smalltile.UriSource.ToString();
 
             App.tiles.Add(edt_linkname.Text, this_tile);
+        }
 
-            var dialog = new Windows.UI.Popups.MessageDialog(edt_linkname.Text);
-            System.Threading.Tasks.Task.Run(() => dialog.ShowAsync());
+        private async Task<StorageFile> get_tile_image() {
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+            picker.FileTypeFilter.Add(".jpg");
+            picker.FileTypeFilter.Add(".jpeg");
+            picker.FileTypeFilter.Add(".png");
+
+            return await picker.PickSingleFileAsync();
+        }
+
+        private async void clk_pick_large_tile(object sender, TappedRoutedEventArgs e) {
+            StorageFile file_user = await get_tile_image();
+            string str_tilename = edt_linkname.Text;
+            try {
+                StorageFolder dir_tiledir = await App.dir_local.CreateFolderAsync("tile_assets\\" + str_tilename, CreationCollisionOption.OpenIfExists);
+                StorageFile file_copiedin = await file_user.CopyAsync(dir_tiledir, "large", NameCollisionOption.ReplaceExisting);
+
+                bmi_largetile.UriSource = new Uri(file_copiedin.Path);
+            } catch (Exception exc) {
+                var dialog = new Windows.UI.Popups.MessageDialog(exc.Message);
+                await dialog.ShowAsync();
+            }
+        }
+
+        private async void clk_pick_wide_tile(object sender, TappedRoutedEventArgs e) {
+            StorageFile file_user = await get_tile_image();
+            string str_tilename = edt_linkname.Text;
+            try {
+                StorageFolder dir_tiledir = await App.dir_local.CreateFolderAsync("tile_assets\\" + str_tilename, CreationCollisionOption.OpenIfExists);
+                StorageFile file_copiedin = await file_user.CopyAsync(dir_tiledir, "wide", NameCollisionOption.ReplaceExisting);
+
+                bmi_widetile.UriSource = new Uri(file_copiedin.Path);
+            } catch (Exception exc) {
+                var dialog = new Windows.UI.Popups.MessageDialog(exc.Message);
+                await dialog.ShowAsync();
+            }
+        }
+
+        private async void clk_pick_med_tile(object sender, TappedRoutedEventArgs e) {
+            StorageFile file_user = await get_tile_image();
+            string str_tilename = edt_linkname.Text;
+            try {
+                StorageFolder dir_tiledir = await App.dir_local.CreateFolderAsync("tile_assets\\" + str_tilename, CreationCollisionOption.OpenIfExists);
+                StorageFile file_copiedin = await file_user.CopyAsync(dir_tiledir, "med", NameCollisionOption.ReplaceExisting);
+
+                bmi_medtile.UriSource = new Uri(file_copiedin.Path);
+            } catch (Exception exc) {
+                var dialog = new Windows.UI.Popups.MessageDialog(exc.Message);
+                await dialog.ShowAsync();
+            }
+        }
+
+        private async void clk_pick_small_tile(object sender, TappedRoutedEventArgs e) {
+            StorageFile file_user = await get_tile_image();
+            string str_tilename = edt_linkname.Text;
+            try {
+                StorageFolder dir_tiledir = await App.dir_local.CreateFolderAsync("tile_assets\\" + str_tilename, CreationCollisionOption.OpenIfExists);
+                StorageFile file_copiedin = await file_user.CopyAsync(dir_tiledir, "small", NameCollisionOption.ReplaceExisting);
+
+                bmi_smalltile.UriSource = new Uri(file_copiedin.Path);
+            } catch (Exception exc) {
+                var dialog = new Windows.UI.Popups.MessageDialog(exc.Message);
+                await dialog.ShowAsync();
+            }
         }
     }
 }

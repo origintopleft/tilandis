@@ -28,6 +28,7 @@ namespace TilandisUWP
         /// </summary>
         /// 
         public static ApplicationDataContainer adc_local = ApplicationData.Current.LocalSettings;
+        public static StorageFolder dir_local = ApplicationData.Current.LocalFolder;
         public static bool is_dark;
         public static Dictionary<string, Dictionary<string, string>> tiles;
 

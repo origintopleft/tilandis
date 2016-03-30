@@ -8,10 +8,10 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Image x:Name="img_large" HorizontalAlignment="Left" Height="310" Margin="12,8,0,0" VerticalAlignment="Top" Width="310" Source="Assets/editor/310x310.png"/>
-        <Image x:Name="img_wide" HorizontalAlignment="Left" Height="150" Margin="12,323,0,0" VerticalAlignment="Top" Width="310" Source="Assets/editor/310x150.png"/>
-        <Image x:Name="img_med" HorizontalAlignment="Left" Height="150" Margin="172,478,0,0" VerticalAlignment="Top" Width="150" Source="Assets/editor/150x150.png"/>
-        <Image x:Name="img_small" HorizontalAlignment="Left" Height="71" Margin="96,478,0,0" VerticalAlignment="Top" Width="71" Source="Assets/editor/71x71.png"/>
+        <Image x:Name="img_large" HorizontalAlignment="Left" Height="310" Margin="12,8,0,0" VerticalAlignment="Top" Width="310" Source="Assets/editor/310x310.png" Tapped="clk_pick_large_tile"/>
+        <Image x:Name="img_wide" HorizontalAlignment="Left" Height="150" Margin="12,323,0,0" VerticalAlignment="Top" Width="310" Source="Assets/editor/310x150.png" Tapped="clk_pick_wide_tile"/>
+        <Image x:Name="img_med" HorizontalAlignment="Left" Height="150" Margin="172,478,0,0" VerticalAlignment="Top" Width="150" Source="Assets/editor/150x150.png" Tapped="clk_pick_med_tile"/>
+        <Image x:Name="img_small" HorizontalAlignment="Left" Height="71" Margin="96,478,0,0" VerticalAlignment="Top" Width="71" Source="Assets/editor/71x71.png" Tapped="clk_pick_small_tile"/>
         <TextBox x:Name="edt_linkname" x:FieldModifier="public" HorizontalAlignment="Left" Margin="342,54,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="349" ToolTipService.ToolTip="Make sure it matches in the proxy." PlaceholderText="Link Name"/>
         <TextBox x:Name="edt_file" x:FieldModifier="public" HorizontalAlignment="Left" Margin="342,92,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="314" ToolTipService.ToolTip="This could be any file on your system, theoretically, but we default to applications in the file picker because that's usually what you want." PlaceholderText="File Path"/>
         <Button x:Name="btn_filebrowse" Content="..." HorizontalAlignment="Left" Margin="661,92,0,0" VerticalAlignment="Top" ToolTipService.ToolTip="Browse"/>
