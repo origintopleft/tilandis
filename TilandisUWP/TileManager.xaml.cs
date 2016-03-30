@@ -46,9 +46,6 @@ namespace TilandisUWP {
         public delegate void eventhandler(object source, TileEditorEventArgs e);
         public event eventhandler RequestTileEditor;
 
-        bool tedt_editing;
-        string tedt_target;
-
         List<Tile> tiles;
 
         public TileManager()
@@ -56,23 +53,18 @@ namespace TilandisUWP {
             this.InitializeComponent();
             tiles = new List<Tile>();
 
-            // TEMP
-            Tile tile_as2 = new Tile();
-            tile_as2.str_largepath = "Assets/dev_temp/as2tile.png";
-            tiles.Add(tile_as2);
+            foreach (KeyValuePair<string, Dictionary<string, string>> kvp_tile in App.tiles) {
+                string str_tilename = kvp_tile.Key;
+                var dict_tile = kvp_tile.Value;
 
-            Tile tile_bj3 = new Tile();
-            tile_bj3.str_largepath = "Assets/dev_temp/bj3tile.png";
-            tiles.Add(tile_bj3);
-
-            Tile tile_citsky = new Tile();
-            tile_citsky.str_largepath = "Assets/dev_temp/citskytile.png";
-            tiles.Add(tile_citsky);
-
-            Tile tile_dota2 = new Tile();
-            tile_dota2.str_largepath = "Assets/dev_temp/dotatile.png";
-            tile_dota2.str_name = "dota2";
-            tiles.Add(tile_dota2);
+                Tile tile_current = new Tile();
+                tile_current.str_largepath = dict_tile["str_largepath"];
+                tile_current.str_widepath = dict_tile["str_widepath"];
+                tile_current.str_medpath = dict_tile["str_medpath"];
+                tile_current.str_smallpath = dict_tile["str_smallpath"];
+                tile_current.str_name = str_tilename;
+                tiles.Add(tile_current);
+            }
 
             Tile stile_newtile = new Tile();
             stile_newtile.str_name = "_new";

@@ -29,6 +29,7 @@ namespace TilandisUWP
         /// 
         public static ApplicationDataContainer adc_local = ApplicationData.Current.LocalSettings;
         public static bool is_dark;
+        public static Dictionary<string, Dictionary<string, string>> tiles;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -53,6 +54,11 @@ namespace TilandisUWP
             default_setting("str_controlprotocol", "tilectl");
             Random rng = new Random();
             default_setting("int_port", rng.Next(50000, 60000));
+
+            default_setting("tiles", new ApplicationDataCompositeValue());
+
+            // TODO: load from file
+            tiles = new Dictionary<string, Dictionary<string, string>>();
 
             if ((bool) adc_local.Values["bool_darkui"] == true) {
                 RequestedTheme = ApplicationTheme.Dark;

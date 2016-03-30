@@ -28,15 +28,41 @@ namespace TilandisUWP {
         public TileEditor() {
             this.InitializeComponent();
 
-            bmi_largetile.UriSource = new Uri(BaseUri, "/Assets/editor/310x310.png");
-            bmi_widetile.UriSource = new Uri(BaseUri, "/Assets/editor/310x150.png");
-            bmi_medtile.UriSource = new Uri(BaseUri, "/Assets/editor/150x150.png");
-            bmi_smalltile.UriSource = new Uri(BaseUri, "/Assets/editor/71x71.png");
+            if (App.is_dark) {
+                bmi_largetile.UriSource = new Uri(BaseUri, "/Assets/editor/310x310d.png");
+                bmi_widetile.UriSource = new Uri(BaseUri, "/Assets/editor/310x150d.png");
+                bmi_medtile.UriSource = new Uri(BaseUri, "/Assets/editor/150x150d.png");
+                bmi_smalltile.UriSource = new Uri(BaseUri, "/Assets/editor/71x71d.png");
+            } else {
+                bmi_largetile.UriSource = new Uri(BaseUri, "/Assets/editor/310x310.png");
+                bmi_widetile.UriSource = new Uri(BaseUri, "/Assets/editor/310x150.png");
+                bmi_medtile.UriSource = new Uri(BaseUri, "/Assets/editor/150x150.png");
+                bmi_smalltile.UriSource = new Uri(BaseUri, "/Assets/editor/71x71.png");
+            }
 
             img_large.Source = bmi_largetile;
             img_wide.Source = bmi_widetile;
             img_med.Source = bmi_medtile;
             img_small.Source = bmi_smalltile;
+        }
+
+        private void clk_savetile(object sender, RoutedEventArgs e) {
+            if (App.tiles.ContainsKey(edt_linkname.Text)) {
+                // TODO: figure out what happens if the tile's already pinned
+
+                App.tiles.Remove(edt_linkname.Text);
+            }
+
+            var this_tile = new Dictionary<string, string>();
+            this_tile["str_largepath"] = bmi_largetile.UriSource.ToString();
+            this_tile["str_widepath"] = bmi_widetile.UriSource.ToString();
+            this_tile["str_medpath"] = bmi_medtile.UriSource.ToString();
+            this_tile["str_smallpath"] = bmi_smalltile.UriSource.ToString();
+
+            App.tiles.Add(edt_linkname.Text, this_tile);
+
+            var dialog = new Windows.UI.Popups.MessageDialog(edt_linkname.Text);
+            System.Threading.Tasks.Task.Run(() => dialog.ShowAsync());
         }
     }
 }

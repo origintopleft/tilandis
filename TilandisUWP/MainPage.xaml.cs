@@ -26,20 +26,19 @@ namespace TilandisUWP
         public MainPage() {
             this.InitializeComponent();
 
-            tm = new TileManager();
-            tm.RequestTileEditor += clbk_open_tile_editor;
-
-            SplitViewREF.Content = tm;
+            clk_nav_tiles(null, null);
         }
 
         private void clbk_open_tile_editor(object sender, TileEditorEventArgs e) {
             TileEditor TileEditorREF = new TileEditor();
 
             if (e.is_editing) {
-                if (e.target_tile == "dota2") {
-                    TileEditorREF.bmi_largetile.UriSource = new Uri(BaseUri, "/Assets/dev_temp/dotatile.png");
-                    TileEditorREF.bmi_widetile.UriSource = new Uri(BaseUri, "/Assets/dev_temp/dotatile_wide.png");
-                }
+                TileEditorREF.edt_linkname.Text = e.target_tile;
+
+                TileEditorREF.bmi_largetile.UriSource = new Uri(App.tiles[e.target_tile]["str_largepath"]);
+                TileEditorREF.bmi_widetile.UriSource = new Uri(App.tiles[e.target_tile]["str_widepath"]);
+                TileEditorREF.bmi_medtile.UriSource = new Uri(App.tiles[e.target_tile]["str_medpath"]);
+                TileEditorREF.bmi_smalltile.UriSource = new Uri(App.tiles[e.target_tile]["str_smallpath"]);
             }
 
             SplitViewREF.Content = TileEditorREF;
@@ -51,6 +50,9 @@ namespace TilandisUWP
 
         private void clk_nav_tiles(object sender, PointerRoutedEventArgs e) {
             SplitViewREF.IsPaneOpen = false;
+            tm = new TileManager();
+            tm.RequestTileEditor += clbk_open_tile_editor;
+
             SplitViewREF.Content = tm;
         }
 
