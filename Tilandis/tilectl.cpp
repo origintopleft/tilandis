@@ -1,6 +1,7 @@
 #include "Tilandis.h"
 #include "exceptions.h"
 #include <map>
+#include <vector>
 
 tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 	ctlcmd.erase(0, 10); // erases "tilectl://"
@@ -122,6 +123,45 @@ tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 		}
 		sai_caller.sin_port = htons(port);
 
+		int buflen;
+		char* buf;
 
+		std::ifstream ifile_links;
+		ifile_links.open(Tilandis::BaseDirectory + L"\\links.json", std::ios::binary);
+		if (ifile_links.is_open()) { // File exists
+			// read file to memory
+			std::vector<char> filedata;
+			char current;
+			while (ifile_links >> std::noskipws >> current) { filedata.push_back(current); }
+			
+			// set up socket buffer
+			buflen = filedata.size();
+			buf = filedata.data();
+		} else { // file doesn't exist, or can't be read, or something
+			// The caller expects *something*, so lets give it an empty array
+			buflen = 3;
+			buf = "{}";
+
+			MessageBox(NULL, L"Couldn't open the links document for the link enumeration request.\n\nThis is usually because the file links.json doesn't exist (make a link first).", L"Tilandis", MB_ICONERROR);
+		}
+
+		SOCKET sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+		if (sock == SOCKET_ERROR) {
+			std::wstring outstr = L"The command was successful, but there was an error with the socket: ";
+			outstr += std::to_wstring(WSAGetLastError());
+			MessageBox(NULL, outstr.c_str(), L"Tilandis", MB_ICONERROR);
+			return False;
+		}
+		int result = sendto(sock, buf, buflen, 0, (sockaddr *) &sai_caller, sizeof(sai_caller));
+		if (result == SOCKET_ERROR) {
+			std::wstring outstr = L"The command was successful, but there was an error with the UDP request: ";
+			outstr += std::to_wstring(WSAGetLastError());
+			MessageBox(NULL, outstr.c_str(), L"Tilandis", MB_ICONERROR);
+			return False;
+		}
+
+		closesocket(sock);
+		WSACleanup();
+		return Mixed; // "success" (even if the file thing didn't work, because we can recover from that) but no need to manipulate links.json
 	}
 }
