@@ -33,7 +33,7 @@ namespace TilandisUWP
             TileEditor TileEditorREF = new TileEditor();
 
             if (e.is_editing) {
-                TileEditorREF.edt_linkname.Text = e.target_tile;
+                TileEditorREF.str_tilename = e.target_tile;
 
                 TileEditorREF.bmi_largetile.UriSource = new Uri(App.tiles[e.target_tile]["str_largepath"]);
                 TileEditorREF.bmi_widetile.UriSource = new Uri(App.tiles[e.target_tile]["str_widepath"]);

@@ -12,7 +12,7 @@
         <Image x:Name="img_wide" HorizontalAlignment="Left" Height="150" Margin="12,323,0,0" VerticalAlignment="Top" Width="310" Source="Assets/editor/310x150.png" Tapped="clk_pick_wide_tile"/>
         <Image x:Name="img_med" HorizontalAlignment="Left" Height="150" Margin="172,478,0,0" VerticalAlignment="Top" Width="150" Source="Assets/editor/150x150.png" Tapped="clk_pick_med_tile"/>
         <Image x:Name="img_small" HorizontalAlignment="Left" Height="71" Margin="96,478,0,0" VerticalAlignment="Top" Width="71" Source="Assets/editor/71x71.png" Tapped="clk_pick_small_tile"/>
-        <TextBox x:Name="edt_linkname" x:FieldModifier="public" HorizontalAlignment="Left" Margin="342,54,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="349" ToolTipService.ToolTip="Make sure it matches in the proxy." PlaceholderText="Link Name"/>
+        <TextBox x:Name="edt_linkname" HorizontalAlignment="Left" Margin="342,54,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="349" ToolTipService.ToolTip="Make sure it matches in the proxy." PlaceholderText="Link Name" TextChanged="clbk_change_link_name"/>
         <TextBox x:Name="edt_file" x:FieldModifier="public" HorizontalAlignment="Left" Margin="342,92,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="314" ToolTipService.ToolTip="This could be any file on your system, theoretically, but we default to applications in the file picker because that's usually what you want." PlaceholderText="File Path"/>
         <Button x:Name="btn_filebrowse" Content="..." HorizontalAlignment="Left" Margin="661,92,0,0" VerticalAlignment="Top" ToolTipService.ToolTip="Browse"/>
         <TextBox x:Name="edt_workdir" x:FieldModifier="public" HorizontalAlignment="Left" Margin="342,128,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="314" ToolTipService.ToolTip="Most programs will want the working directory to be the same place the executable is in. If you know your case is an exception, you can change it here." PlaceholderText="Working Directory"/>
@@ -22,5 +22,6 @@
         <Button x:Name="btn_save" Content="Save" HorizontalAlignment="Left" Margin="454,239,0,0" VerticalAlignment="Top" Click="clk_savetile"/>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="334,10,0,0" TextWrapping="Wrap" Text="Tile Editor" VerticalAlignment="Top" FontSize="24"/>
         <CheckBox x:Name="cbx_admin" x:FieldModifier="public" Content="Run as administrator" HorizontalAlignment="Left" Margin="342,203,0,0" VerticalAlignment="Top" ToolTipService.ToolTip="This is dangerous. Make sure you really need this. It helps to stick a UAC shield on your tile somewhere."/>
+        <Button x:Name="btn_delete" Content="Delete" HorizontalAlignment="Left" Margin="510,239,0,0" VerticalAlignment="Top" Click="clk_delete"/>
     </Grid>
 </Page>

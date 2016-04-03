@@ -27,6 +27,17 @@ namespace TilandisUWP {
         public BitmapImage bmi_medtile = new BitmapImage();
         public BitmapImage bmi_smalltile = new BitmapImage();
 
+        private string _str_tilename;
+
+        public string str_tilename {
+            get { return _str_tilename; }
+            set {
+                _str_tilename = value;
+                edt_linkname.Text = value;
+            }
+        }
+
+
         public TileEditor() {
             this.InitializeComponent();
 
@@ -46,6 +57,8 @@ namespace TilandisUWP {
             img_wide.Source = bmi_widetile;
             img_med.Source = bmi_medtile;
             img_small.Source = bmi_smalltile;
+
+            str_tilename = "";
         }
 
         private void clk_savetile(object sender, RoutedEventArgs e) {
@@ -78,56 +91,72 @@ namespace TilandisUWP {
         private async void clk_pick_large_tile(object sender, TappedRoutedEventArgs e) {
             StorageFile file_user = await get_tile_image();
             string str_tilename = edt_linkname.Text;
-            try {
-                StorageFolder dir_tiledir = await App.dir_local.CreateFolderAsync("tile_assets\\" + str_tilename, CreationCollisionOption.OpenIfExists);
-                StorageFile file_copiedin = await file_user.CopyAsync(dir_tiledir, "large", NameCollisionOption.ReplaceExisting);
+            StorageFolder dir_tiledir = await App.dir_local.CreateFolderAsync("tile_assets\\" + str_tilename, CreationCollisionOption.OpenIfExists);
+            StorageFile file_copiedin = await file_user.CopyAsync(dir_tiledir, "large", NameCollisionOption.ReplaceExisting);
 
-                bmi_largetile.UriSource = new Uri(file_copiedin.Path);
-            } catch (Exception exc) {
-                var dialog = new Windows.UI.Popups.MessageDialog(exc.Message);
-                await dialog.ShowAsync();
-            }
+            bmi_largetile.UriSource = new Uri(file_copiedin.Path);
         }
 
         private async void clk_pick_wide_tile(object sender, TappedRoutedEventArgs e) {
             StorageFile file_user = await get_tile_image();
             string str_tilename = edt_linkname.Text;
-            try {
-                StorageFolder dir_tiledir = await App.dir_local.CreateFolderAsync("tile_assets\\" + str_tilename, CreationCollisionOption.OpenIfExists);
-                StorageFile file_copiedin = await file_user.CopyAsync(dir_tiledir, "wide", NameCollisionOption.ReplaceExisting);
+            StorageFolder dir_tiledir = await App.dir_local.CreateFolderAsync("tile_assets\\" + str_tilename, CreationCollisionOption.OpenIfExists);
+            StorageFile file_copiedin = await file_user.CopyAsync(dir_tiledir, "wide", NameCollisionOption.ReplaceExisting);
 
-                bmi_widetile.UriSource = new Uri(file_copiedin.Path);
-            } catch (Exception exc) {
-                var dialog = new Windows.UI.Popups.MessageDialog(exc.Message);
-                await dialog.ShowAsync();
-            }
+            bmi_widetile.UriSource = new Uri(file_copiedin.Path);
         }
 
         private async void clk_pick_med_tile(object sender, TappedRoutedEventArgs e) {
             StorageFile file_user = await get_tile_image();
             string str_tilename = edt_linkname.Text;
-            try {
-                StorageFolder dir_tiledir = await App.dir_local.CreateFolderAsync("tile_assets\\" + str_tilename, CreationCollisionOption.OpenIfExists);
-                StorageFile file_copiedin = await file_user.CopyAsync(dir_tiledir, "med", NameCollisionOption.ReplaceExisting);
+            StorageFolder dir_tiledir = await App.dir_local.CreateFolderAsync("tile_assets\\" + str_tilename, CreationCollisionOption.OpenIfExists);
+            StorageFile file_copiedin = await file_user.CopyAsync(dir_tiledir, "med", NameCollisionOption.ReplaceExisting);
 
-                bmi_medtile.UriSource = new Uri(file_copiedin.Path);
-            } catch (Exception exc) {
-                var dialog = new Windows.UI.Popups.MessageDialog(exc.Message);
-                await dialog.ShowAsync();
-            }
+            bmi_medtile.UriSource = new Uri(file_copiedin.Path);
         }
 
         private async void clk_pick_small_tile(object sender, TappedRoutedEventArgs e) {
             StorageFile file_user = await get_tile_image();
-            string str_tilename = edt_linkname.Text;
-            try {
-                StorageFolder dir_tiledir = await App.dir_local.CreateFolderAsync("tile_assets\\" + str_tilename, CreationCollisionOption.OpenIfExists);
-                StorageFile file_copiedin = await file_user.CopyAsync(dir_tiledir, "small", NameCollisionOption.ReplaceExisting);
+            StorageFolder dir_tiledir = await App.dir_local.CreateFolderAsync("tile_assets\\" + str_tilename, CreationCollisionOption.OpenIfExists);
+            StorageFile file_copiedin = await file_user.CopyAsync(dir_tiledir, "small", NameCollisionOption.ReplaceExisting);
 
-                bmi_smalltile.UriSource = new Uri(file_copiedin.Path);
-            } catch (Exception exc) {
-                var dialog = new Windows.UI.Popups.MessageDialog(exc.Message);
+            bmi_smalltile.UriSource = new Uri(file_copiedin.Path);
+        }
+
+        private void clk_delete(object sender, RoutedEventArgs e) {
+            App.tiles.Remove(str_tilename);
+
+            if (str_tilename != "") {
+                
+                try { Directory.Delete(App.dir_local.Path + "\\tile_assets\\" + str_tilename, true); }
+                catch (DirectoryNotFoundException) { /* pass */ }
+            }
+        }
+
+        private async void clbk_change_link_name(object sender, TextChangedEventArgs e) {
+            string tilepath = "";
+            try {
+                // for tilefile in ["large", "wide", "med", "small"]:
+                foreach (string tilefile in new List<string> { "large", "wide", "med", "small" }) {
+                    // End result: tilepath = LocalState\tile_assets
+                    tilepath  = "tile_assets\\";
+                    tilepath += str_tilename + "\\";
+                    tilepath += tilefile;
+
+                    if (await App.dir_local.TryGetItemAsync(tilepath) != null) {
+                        // We do it this way instead of just using bmi_imagefile's data so we don't accidentally
+                        // delete editor assets or something silly like that
+                        StorageFile file_old = await App.dir_local.GetFileAsync(tilepath);
+                        StorageFolder dir_new = await App.dir_local.CreateFolderAsync("tile_assets\\" + edt_linkname.Text, CreationCollisionOption.OpenIfExists);
+                        await file_old.MoveAsync(dir_new);
+                    }
+                }
+                str_tilename = edt_linkname.Text;
+            }
+            catch (Exception exc) {
+                var dialog = new Windows.UI.Popups.MessageDialog(tilepath);
                 await dialog.ShowAsync();
+                throw exc;
             }
         }
     }

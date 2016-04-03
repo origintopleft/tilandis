@@ -56,6 +56,7 @@ namespace Tilandis {
 
 		extern bool PrepareTheLinkDocument();
 		extern bool SaveLinkDocument();
+		extern bool ManipulateLinkDocument();
 	}
 
 	namespace GetOpt { // cmdline.cpp
@@ -69,8 +70,6 @@ namespace Tilandis {
 	}
 
 	extern bool RegisterProtocol();
-
-	extern bool ManipulateLinkDocument();
 }
 
 extern std::wstring basedir(std::wstring);

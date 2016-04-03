@@ -1,15 +1,21 @@
 #include "Tilandis.h"
 #include "exceptions.h"
+#include <map>
+#include <winsock2.h>
+
+// tell the linker we need winsock shit
+#pragma comment(lib,"ws2_32.lib")
 
 tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 	ctlcmd.erase(0, 10); // erases "tilectl://"
 
-	// TileCTL cliff notes:
-	// tilectl://<command>/<link>?option=value&option=value
-	// examples without tilectl:// prefix:
-	// new/notepad?path=C:\Windows\notepad.exe&workdir=C:\Windows&args=C:\file.txt&admin=true
-	// delete/notepad
-	// "edit" and "launch" might happen, currently uncertain
+	/* TileCTL cliff notes:
+	 * tilectl://<command>/<link>?option=value&option=value
+	 * examples without tilectl:// prefix:
+	 * new/notepad?path=C:\Windows\notepad.exe&workdir=C:\Windows&args=C:\file.txt&admin=true
+	 * delete/notepad
+	 * "edit" and "launch" might happen, currently uncertain
+	 */
 
 	// This particular implementation moves through each part of the tilectl command by erasing the parts
 	// it's already understood. This is not required by any standard, it just happens to be the easiest
@@ -23,6 +29,7 @@ tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 	// link name (and args, if we have them)
 	bool hasargs;
 	size_t questpos = ctlcmd.find(L'?');
+	std::map<std::wstring, std::wstring> dict_args;
 
 	if (questpos != ctlcmd.npos) { // ? is present
 		hasargs = true;
@@ -50,10 +57,15 @@ tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 			std::wstring option = curarg.substr(0, equalspos);
 			std::wstring value = curarg.substr(equalspos + 1, curarg.npos);
 
-			if (option == L"path") { Tilandis::PathName = value; } else if (option == L"args") { Tilandis::Args = value; } else if (option == L"workdir") { Tilandis::WorkingDirectory = value; } else if (option == L"admin") {
+			if (option == L"path") { Tilandis::PathName = value; }
+			else if (option == L"args") { Tilandis::Args = value; }
+			else if (option == L"workdir") { Tilandis::WorkingDirectory = value; }
+			else if (option == L"admin") {
 				std::transform(value.begin(), value.end(), value.begin(), ::towlower); // lowercase string
 
 				if (value == L"true") { Tilandis::LinkInAdminMode = true; }
+			} else {
+				dict_args[option] = value;
 			}
 
 			ctlcmd.erase(0, andpos + 1);
@@ -87,5 +99,12 @@ tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 
 		Tilandis::DeleteMode = true;
 		return True;
+	} else if (command == L"enum") { // Lists existing links
+		if (!hasargs) {
+			throw Tilandis::Exceptions::MissingArg;
+			return False;
+		}
+
+		
 	}
 }

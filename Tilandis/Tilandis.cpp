@@ -62,7 +62,7 @@ int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR, int nShow) {
 					switch (Tilandis::ParseTileCTL(LinkName)) {
 					case True:
 						try {
-							bool result = Tilandis::ManipulateLinkDocument();
+							bool result = Tilandis::Links::ManipulateLinkDocument();
 							if (result) { return 0; }
 							else { return 2; }
 						} catch (Tilandis::Exceptions::BadCommandLine exc) {
@@ -71,7 +71,7 @@ int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR, int nShow) {
 						}
 					case Mixed: // returns Mixed on "successful, but..."
 						try {
-							bool result = Tilandis::ManipulateLinkDocument();
+							bool result = Tilandis::Links::ManipulateLinkDocument();
 							if (result) { return 1; } else { return 2; }
 						} catch (Tilandis::Exceptions::BadCommandLine exc) {
 							std::wcout << exc.what() << std::endl;
@@ -145,24 +145,4 @@ bool Tilandis::RegisterProtocol() {
 	result = RegSetValueEx(subregistry, NULL, 0, REG_SZ, (LPBYTE) regbytes, 65535);
 	if (result != ERROR_SUCCESS) { return false; }
 	return true;
-}
-
-bool Tilandis::ManipulateLinkDocument() {
-	if (Tilandis::DeleteMode && Tilandis::CreateMode) { throw Tilandis::Exceptions::BadArgCombo; }
-	if (Tilandis::DeleteMode) { Tilandis::Links::DeleteLink(); }
-	if (Tilandis::CreateMode) {
-		try {
-			bool success = Tilandis::Links::CreateLink();
-			if (!success) {
-				std::wcout << Tilandis::Err << std::endl;
-			}
-		} catch (Tilandis::Exceptions::BadCommandLine exc) {
-			wchar_t* excwhat = L"";
-			const char* excwhatmbs = "";
-			excwhatmbs = exc.what(); // we do it this way because the (reasonably) paranoid compiler doesn't reckon the pointer will always be initialized
-			mbstowcs_s(NULL, excwhat, strlen(excwhatmbs) + 1, excwhatmbs, (size_t) 2048);
-			MessageBox(NULL, excwhat, L"Tilandis", 0);
-			return false;
-		}
-	}
 }

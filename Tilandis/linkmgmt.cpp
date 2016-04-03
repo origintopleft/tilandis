@@ -53,6 +53,26 @@ bool Tilandis::Links::PrepareTheLinkDocument() {
 	else { return true; }
 }
 
+bool Tilandis::Links::ManipulateLinkDocument() {
+	if (Tilandis::DeleteMode && Tilandis::CreateMode) { throw Tilandis::Exceptions::BadArgCombo; }
+	if (Tilandis::DeleteMode) { Tilandis::Links::DeleteLink(); }
+	if (Tilandis::CreateMode) {
+		try {
+			bool success = Tilandis::Links::CreateLink();
+			if (!success) {
+				std::wcout << Tilandis::Err << std::endl;
+			}
+		} catch (Tilandis::Exceptions::BadCommandLine exc) {
+			wchar_t* excwhat = L"";
+			const char* excwhatmbs = "";
+			excwhatmbs = exc.what(); // we do it this way because the (reasonably) paranoid compiler doesn't reckon the pointer will always be initialized
+			mbstowcs_s(NULL, excwhat, strlen(excwhatmbs) + 1, excwhatmbs, (size_t) 2048);
+			MessageBox(NULL, excwhat, L"Tilandis", 0);
+			return false;
+		}
+	}
+}
+
 bool Tilandis::Links::CreateLink() {
 	if (Tilandis::PathName.empty()) { throw Tilandis::Exceptions::MissingArg; }
 	if (Tilandis::LinkName.empty()) { throw Tilandis::Exceptions::MissingArg; }

@@ -69,6 +69,8 @@ namespace TilandisUWP
                 RequestedTheme = ApplicationTheme.Light;
                 is_dark = false;
             }
+
+            UnhandledException += generic_exc_handler;
         }
 
         private static void default_setting<T>(string key, T value) {
@@ -142,6 +144,13 @@ namespace TilandisUWP
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             deferral.Complete();
+        }
+
+        private void generic_exc_handler(object sender, UnhandledExceptionEventArgs eargs) {
+            string title    = "Hi! I'm a generic exception window!";
+            string content  = "Whatever it is you just did broke in a new and exciting way that I haven't accounted for. The exception message is below:\n\n";
+                   content += eargs.Message;
+                   content += "\n\nIf you're going to post about this on the Internet, you need to do me a favor and give me a lot of detail about what exactly it is you were doing. What screen were you on? What did you do right before this happened? What was it supposed to do? The more detail you can provide, the better. Thank you.";
         }
     }
 }
