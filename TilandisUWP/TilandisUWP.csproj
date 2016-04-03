@@ -122,11 +122,6 @@
     <None Include="TilandisUWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\dev_temp\dotatile_wide.png" />
-    <Content Include="Assets\dev_temp\bj3tile.png" />
-    <Content Include="Assets\dev_temp\as2tile.png" />
-    <Content Include="Assets\dev_temp\citskytile.png" />
-    <Content Include="Assets\dev_temp\dotatile.png" />
     <Content Include="Assets\editor\150x150.png" />
     <Content Include="Assets\editor\150x150d.png" />
     <Content Include="Assets\editor\310x150.png" />
