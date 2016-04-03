@@ -71,6 +71,8 @@ bool Tilandis::Links::ManipulateLinkDocument() {
 			return false;
 		}
 	}
+
+	return true;
 }
 
 bool Tilandis::Links::CreateLink() {

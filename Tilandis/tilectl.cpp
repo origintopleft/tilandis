@@ -1,5 +1,6 @@
 #include "Tilandis.h"
 #include "exceptions.h"
+#include "Utility.h"
 #include <map>
 #include <vector>
 
@@ -20,7 +21,12 @@ tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 
 	// command
 	size_t slashpos = ctlcmd.find(L'/');
-	std::wstring command = ctlcmd.substr(0, slashpos);
+	bool hasslash;
+	std::wstring command;
+	if (slashpos != ctlcmd.npos) {
+		hasslash = true;
+		command = ctlcmd.substr(0, slashpos);
+	} else { hasslash = false; }
 	ctlcmd.erase(0, slashpos + 1);
 
 	// link name (and args, if we have them)
@@ -30,7 +36,8 @@ tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 
 	if (questpos != ctlcmd.npos) { // ? is present
 		hasargs = true;
-		Tilandis::LinkName = ctlcmd.substr(0, questpos);
+		if (hasslash) { Tilandis::LinkName = ctlcmd.substr(0, questpos); }
+		else { command = ctlcmd.substr(0, questpos); }
 		ctlcmd.erase(0, questpos + 1);
 
 		// Count the args so we know how long the for loop is going to be
@@ -69,7 +76,8 @@ tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 		}
 	} else {
 		hasargs = false;
-		Tilandis::LinkName = ctlcmd;
+		if (hasslash) { Tilandis::LinkName = ctlcmd; }
+		else { command = ctlcmd; }
 		ctlcmd.erase(0, ctlcmd.npos); // should empty the string
 	}
 
@@ -124,19 +132,18 @@ tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 		sai_caller.sin_port = htons(port);
 
 		int buflen;
-		char* buf;
+		const char* buf = "I AM NOT DEFINED PROPERLY";
+		std::string str_filedata;
 
 		std::ifstream ifile_links;
-		ifile_links.open(Tilandis::BaseDirectory + L"\\links.json", std::ios::binary);
+		ifile_links.open(Tilandis::BaseDirectory + L"\\links.json");
+		// BULLSHIT: if blocks have their own scopes
 		if (ifile_links.is_open()) { // File exists
 			// read file to memory
-			std::vector<char> filedata;
-			char current;
-			while (ifile_links >> std::noskipws >> current) { filedata.push_back(current); }
-			
-			// set up socket buffer
-			buflen = filedata.size();
-			buf = filedata.data();
+			str_filedata.assign((std::istream_iterator<char>(ifile_links)), (std::istream_iterator<char>()));
+
+			buf = str_filedata.c_str();
+			buflen = str_filedata.length();
 		} else { // file doesn't exist, or can't be read, or something
 			// The caller expects *something*, so lets give it an empty array
 			buflen = 3;
@@ -152,7 +159,7 @@ tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 			MessageBox(NULL, outstr.c_str(), L"Tilandis", MB_ICONERROR);
 			return False;
 		}
-		int result = sendto(sock, buf, buflen, 0, (sockaddr *) &sai_caller, sizeof(sai_caller));
+		int result = sendto(sock, buf, sizeof(char) * buflen, 0, (sockaddr *) &sai_caller, sizeof(sai_caller));
 		if (result == SOCKET_ERROR) {
 			std::wstring outstr = L"The command was successful, but there was an error with the UDP request: ";
 			outstr += std::to_wstring(WSAGetLastError());
