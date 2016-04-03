@@ -151,6 +151,9 @@ namespace TilandisUWP
             string content  = "Whatever it is you just did broke in a new and exciting way that I haven't accounted for. The exception message is below:\n\n";
                    content += eargs.Message;
                    content += "\n\nIf you're going to post about this on the Internet, you need to do me a favor and give me a lot of detail about what exactly it is you were doing. What screen were you on? What did you do right before this happened? What was it supposed to do? The more detail you can provide, the better. Thank you.";
+
+            var dialog = new Windows.UI.Popups.MessageDialog(content, title);
+            Task.Run(async () => await dialog.ShowAsync());
         }
     }
 }
