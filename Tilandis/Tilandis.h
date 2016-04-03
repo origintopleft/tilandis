@@ -14,9 +14,10 @@
 #include "tristate.h"
 #include "tilectl.h"
 
+// TODO: consider WIN32_LEAN_AND_MEAN
+
 // Home namespace
 namespace Tilandis {
-	// TODO: tristates
 	extern void PrintUsage(std::wstring);
 
 	// cmdline.cpp

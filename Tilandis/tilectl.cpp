@@ -1,10 +1,6 @@
 #include "Tilandis.h"
 #include "exceptions.h"
 #include <map>
-#include <winsock2.h>
-
-// tell the linker we need winsock shit
-#pragma comment(lib,"ws2_32.lib")
 
 tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 	ctlcmd.erase(0, 10); // erases "tilectl://"
@@ -105,6 +101,27 @@ tristate Tilandis::ParseTileCTL(std::wstring ctlcmd) {
 			return False;
 		}
 
-		
+		WSADATA wsa;
+		if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) { // Winsock failure
+			std::wstring outstr = L"Winsock failed to start up, error code: ";
+			outstr += std::to_wstring(WSAGetLastError());
+			MessageBox(NULL, outstr.c_str(), L"Tilandis", MB_ICONERROR);
+			return False;
+		}
+
+		struct sockaddr_in sai_caller;
+		memset((wchar_t *) &sai_caller, 0, sizeof(sai_caller));
+		sai_caller.sin_family = AF_INET;
+		sai_caller.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
+
+		int port;
+		try { port = std::stoi(dict_args.at(L"port")); }
+		catch (std::out_of_range) {
+			throw Tilandis::Exceptions::MissingArg;
+			return False;
+		}
+		sai_caller.sin_port = htons(port);
+
+
 	}
 }

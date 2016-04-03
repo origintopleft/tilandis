@@ -40,7 +40,7 @@ int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR, int nShow) {
 					return 0;
 				}
 			} else {
-				bool result = Tilandis::ManipulateLinkDocument();
+				bool result = Tilandis::Links::ManipulateLinkDocument();
 				if (result) { return 0; }
 				else { return 1; }
 			}
@@ -69,15 +69,8 @@ int CALLBACK wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR, int nShow) {
 							std::wcout << exc.what() << std::endl;
 							return 2;
 						}
-					case Mixed: // returns Mixed on "successful, but..."
-						try {
-							bool result = Tilandis::Links::ManipulateLinkDocument();
-							if (result) { return 1; } else { return 2; }
-						} catch (Tilandis::Exceptions::BadCommandLine exc) {
-							std::wcout << exc.what() << std::endl;
-							return 2;
-						}
-						return 1;
+					case Mixed: // returns Mixed on "successful, but don't do anything to the links"
+						return 0;
 					case False:
 						return 2;
 					}
