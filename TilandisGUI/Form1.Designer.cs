@@ -23,7 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.lst_links = new System.Windows.Forms.ListView();
             this.linkname = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.path = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.grp_linksettings = new System.Windows.Forms.GroupBox();
@@ -41,31 +41,35 @@
             this.button2 = new System.Windows.Forms.Button();
             this.btn_newlink = new System.Windows.Forms.Button();
             this.btn_dellink = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
             this.grp_linksettings.SuspendLayout();
             this.SuspendLayout();
             // 
-            // listView1
+            // lst_links
             // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.lst_links.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.linkname,
             this.path});
-            this.listView1.Location = new System.Drawing.Point(13, 13);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(246, 390);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.lst_links.Location = new System.Drawing.Point(13, 13);
+            this.lst_links.Name = "lst_links";
+            this.lst_links.Size = new System.Drawing.Size(246, 390);
+            this.lst_links.TabIndex = 0;
+            this.lst_links.UseCompatibleStateImageBehavior = false;
+            this.lst_links.View = System.Windows.Forms.View.Details;
             // 
             // linkname
             // 
             this.linkname.Text = "Link Name";
+            this.linkname.Width = 63;
             // 
             // path
             // 
             this.path.Text = "File Path";
+            this.path.Width = 176;
             // 
             // grp_linksettings
             // 
+            this.grp_linksettings.Controls.Add(this.label5);
             this.grp_linksettings.Controls.Add(this.button2);
             this.grp_linksettings.Controls.Add(this.cbx_asadmin);
             this.grp_linksettings.Controls.Add(this.textBox4);
@@ -122,6 +126,7 @@
             // 
             // textBox2
             // 
+            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox2.Location = new System.Drawing.Point(100, 76);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(391, 20);
@@ -130,9 +135,10 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(49, 79);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(40, 79);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(48, 13);
+            this.label2.Size = new System.Drawing.Size(57, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "File Path";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -211,6 +217,15 @@
             this.btn_dellink.Text = "Delete";
             this.btn_dellink.UseVisualStyleBackColor = true;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(455, 220);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(117, 13);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "Bold fields are required.";
+            // 
             // frm_tilandisgui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -219,7 +234,7 @@
             this.Controls.Add(this.btn_dellink);
             this.Controls.Add(this.btn_newlink);
             this.Controls.Add(this.grp_linksettings);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.lst_links);
             this.Name = "frm_tilandisgui";
             this.Text = "Tilandis Control GUI";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -231,7 +246,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView lst_links;
         private System.Windows.Forms.ColumnHeader linkname;
         private System.Windows.Forms.ColumnHeader path;
         private System.Windows.Forms.GroupBox grp_linksettings;
@@ -249,6 +264,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btn_newlink;
         private System.Windows.Forms.Button btn_dellink;
+        private System.Windows.Forms.Label label5;
     }
 }
 
