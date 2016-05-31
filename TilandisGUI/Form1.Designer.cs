@@ -28,7 +28,7 @@
             this.path = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.grp_linksettings = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btn_savelink = new System.Windows.Forms.Button();
             this.cbx_asadmin = new System.Windows.Forms.CheckBox();
             this.edt_args = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -72,7 +72,7 @@
             // grp_linksettings
             // 
             this.grp_linksettings.Controls.Add(this.label5);
-            this.grp_linksettings.Controls.Add(this.button2);
+            this.grp_linksettings.Controls.Add(this.btn_savelink);
             this.grp_linksettings.Controls.Add(this.cbx_asadmin);
             this.grp_linksettings.Controls.Add(this.edt_args);
             this.grp_linksettings.Controls.Add(this.label4);
@@ -100,14 +100,14 @@
             this.label5.TabIndex = 13;
             this.label5.Text = "Bold fields are required.";
             // 
-            // button2
+            // btn_savelink
             // 
-            this.button2.Location = new System.Drawing.Point(9, 215);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 12;
-            this.button2.Text = "Save";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btn_savelink.Location = new System.Drawing.Point(9, 215);
+            this.btn_savelink.Name = "btn_savelink";
+            this.btn_savelink.Size = new System.Drawing.Size(75, 23);
+            this.btn_savelink.TabIndex = 12;
+            this.btn_savelink.Text = "Save";
+            this.btn_savelink.UseVisualStyleBackColor = true;
             // 
             // cbx_asadmin
             // 
@@ -252,7 +252,7 @@
         private System.Windows.Forms.ColumnHeader linkname;
         private System.Windows.Forms.ColumnHeader path;
         private System.Windows.Forms.GroupBox grp_linksettings;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btn_savelink;
         private System.Windows.Forms.CheckBox cbx_asadmin;
         private System.Windows.Forms.TextBox edt_args;
         private System.Windows.Forms.Label label4;
