@@ -38,7 +38,14 @@ namespace TilandisGUI {
             }
 
             ListViewItem lvi_curitem = lst_links.SelectedItems[0];
-            MessageBox.Show(lvi_curitem.Text);
+
+            JObject prop_linksettings = (JObject) json_links.Value<JObject>(lvi_curitem.Text);
+
+            edt_linkname.Text = lvi_curitem.Text;
+            edt_pathname.Text = prop_linksettings.Value<string>("path");
+            edt_workdir.Text = prop_linksettings.Value<string>("workdir");
+            edt_args.Text = prop_linksettings.Value<string>("args");
+            cbx_asadmin.Checked = prop_linksettings.Value<bool>("asadmin");
         }
 
         private void func_reloadjson() {

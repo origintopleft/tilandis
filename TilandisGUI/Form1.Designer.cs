@@ -30,15 +30,15 @@
             this.label5 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.cbx_asadmin = new System.Windows.Forms.CheckBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.edt_args = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.edt_linkname = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.edt_pathname = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.btn_browseworkdir = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.edt_workdir = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btn_newlink = new System.Windows.Forms.Button();
             this.btn_dellink = new System.Windows.Forms.Button();
@@ -74,15 +74,15 @@
             this.grp_linksettings.Controls.Add(this.label5);
             this.grp_linksettings.Controls.Add(this.button2);
             this.grp_linksettings.Controls.Add(this.cbx_asadmin);
-            this.grp_linksettings.Controls.Add(this.textBox4);
+            this.grp_linksettings.Controls.Add(this.edt_args);
             this.grp_linksettings.Controls.Add(this.label4);
-            this.grp_linksettings.Controls.Add(this.textBox3);
+            this.grp_linksettings.Controls.Add(this.edt_linkname);
             this.grp_linksettings.Controls.Add(this.label3);
             this.grp_linksettings.Controls.Add(this.button1);
-            this.grp_linksettings.Controls.Add(this.textBox2);
+            this.grp_linksettings.Controls.Add(this.edt_pathname);
             this.grp_linksettings.Controls.Add(this.label2);
             this.grp_linksettings.Controls.Add(this.btn_browseworkdir);
-            this.grp_linksettings.Controls.Add(this.textBox1);
+            this.grp_linksettings.Controls.Add(this.edt_workdir);
             this.grp_linksettings.Controls.Add(this.label1);
             this.grp_linksettings.Location = new System.Drawing.Point(266, 13);
             this.grp_linksettings.Name = "grp_linksettings";
@@ -120,12 +120,12 @@
             this.cbx_asadmin.Text = "Run as Administrator";
             this.cbx_asadmin.UseVisualStyleBackColor = true;
             // 
-            // textBox4
+            // edt_args
             // 
-            this.textBox4.Location = new System.Drawing.Point(100, 128);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(391, 20);
-            this.textBox4.TabIndex = 10;
+            this.edt_args.Location = new System.Drawing.Point(100, 128);
+            this.edt_args.Name = "edt_args";
+            this.edt_args.Size = new System.Drawing.Size(391, 20);
+            this.edt_args.TabIndex = 10;
             // 
             // label4
             // 
@@ -137,13 +137,13 @@
             this.label4.Text = "Arguments";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // textBox3
+            // edt_linkname
             // 
-            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox3.Location = new System.Drawing.Point(100, 16);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(391, 20);
-            this.textBox3.TabIndex = 7;
+            this.edt_linkname.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.edt_linkname.Location = new System.Drawing.Point(100, 16);
+            this.edt_linkname.Name = "edt_linkname";
+            this.edt_linkname.Size = new System.Drawing.Size(391, 20);
+            this.edt_linkname.TabIndex = 7;
             // 
             // label3
             // 
@@ -165,13 +165,13 @@
             this.button1.Text = "Browse";
             this.button1.UseVisualStyleBackColor = true;
             // 
-            // textBox2
+            // edt_pathname
             // 
-            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(100, 76);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(391, 20);
-            this.textBox2.TabIndex = 4;
+            this.edt_pathname.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.edt_pathname.Location = new System.Drawing.Point(100, 76);
+            this.edt_pathname.Name = "edt_pathname";
+            this.edt_pathname.Size = new System.Drawing.Size(391, 20);
+            this.edt_pathname.TabIndex = 4;
             // 
             // label2
             // 
@@ -193,12 +193,12 @@
             this.btn_browseworkdir.Text = "Browse";
             this.btn_browseworkdir.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // edt_workdir
             // 
-            this.textBox1.Location = new System.Drawing.Point(100, 102);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(391, 20);
-            this.textBox1.TabIndex = 1;
+            this.edt_workdir.Location = new System.Drawing.Point(100, 102);
+            this.edt_workdir.Name = "edt_workdir";
+            this.edt_workdir.Size = new System.Drawing.Size(391, 20);
+            this.edt_workdir.TabIndex = 1;
             // 
             // label1
             // 
@@ -254,15 +254,15 @@
         private System.Windows.Forms.GroupBox grp_linksettings;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.CheckBox cbx_asadmin;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox edt_args;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox edt_linkname;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox edt_pathname;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btn_browseworkdir;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox edt_workdir;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btn_newlink;
         private System.Windows.Forms.Button btn_dellink;
