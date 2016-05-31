@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics; // Process, ProcessStartInfo. 
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.IO;
@@ -23,6 +24,8 @@ namespace TilandisGUI {
             func_reloadjson();
 
             lst_links.SelectedIndexChanged += clbk_linksel;
+
+            btn_dellink.Click += clbk_dellink;
         }
 
         private void clbk_linksel(object sender, EventArgs e) {
@@ -32,7 +35,7 @@ namespace TilandisGUI {
 
             ListViewItem lvi_curitem = lst_links.SelectedItems[0];
 
-            JObject prop_linksettings = (JObject) json_links.Value<JObject>(lvi_curitem.Text);
+            JObject prop_linksettings = json_links.Value<JObject>(lvi_curitem.Text);
 
             edt_linkname.Text = lvi_curitem.Text;
             edt_pathname.Text = prop_linksettings.Value<string>("path");
@@ -42,6 +45,8 @@ namespace TilandisGUI {
         }
 
         private void func_reloadjson() {
+            lst_links.Items.Clear();
+
             StreamReader r = new StreamReader("links.json");
             string str_linksjson = r.ReadToEnd();
             json_links = JObject.Parse(str_linksjson);
@@ -55,6 +60,28 @@ namespace TilandisGUI {
 
                 lst_links.Items.Add(lvi_curitem);
             }
+        }
+
+        private void clbk_dellink(object sender, EventArgs e) {
+            if (lst_links.SelectedItems.Count <= 0) {
+                MessageBox.Show("Select a link first.");
+                return;
+            }
+
+            ListViewItem lvi_curitem = lst_links.SelectedItems[0];
+
+            ProcessStartInfo psi_tilandis = new ProcessStartInfo();
+            psi_tilandis.FileName = "tilandis.exe";
+            psi_tilandis.Arguments = "-d " + lvi_curitem.Text;
+            psi_tilandis.UseShellExecute = true; // carry workdir over
+
+            Process proc_tilandis = new Process();
+            proc_tilandis.StartInfo = psi_tilandis;
+
+            proc_tilandis.Start();
+            proc_tilandis.WaitForExit();
+
+            func_reloadjson();
         }
     }
 }
